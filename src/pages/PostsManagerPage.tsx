@@ -25,66 +25,15 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui/index"
+import { Post } from "../entities/Post/types"
+import { Comment } from "../entities/Comment/types"
+import { Tag } from "../entities/Tag/types"
+import { User, UserDetail } from "../entities/User/types"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-
-  interface Post {
-    id: number
-    title: string
-    body: string
-    userId: number
-    tags: string[]
-    reactions?: {
-      likes: number
-      dislikes: number
-    }
-    author?: {
-      id: number
-      username: string
-      image: string
-    }
-  }
-
-  interface User {
-    id: number
-    username: string
-    image: string
-  }
-
-  interface UserDetail extends User {
-    firstName?: string
-    lastName?: string
-    age?: number
-    email?: string
-    phone?: string
-    address?: {
-      address: string
-      city: string
-      state: string
-    }
-    company?: {
-      name: string
-      title: string
-    }
-  }
-
-  interface Comment {
-    id: number
-    body: string
-    postId: number
-    user: {
-      username: string
-    }
-    likes: number
-  }
-
-  interface Tag {
-    url: string
-    slug: string
-  }
 
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([])
