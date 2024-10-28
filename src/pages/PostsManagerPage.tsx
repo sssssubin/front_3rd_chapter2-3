@@ -28,6 +28,7 @@ import {
 import { Post } from "../entities/post/model/Post.ts"
 import { highlightText } from "../shared/ui/highlightText.tsx"
 import { User } from "../entities/user/model/User.ts"
+import { usePost } from "../features/post/ui/model/postStore.ts"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -35,10 +36,7 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-
-  // Post
-  const [posts, setPosts] = useState([])
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+  const { posts, setPosts, selectedPost, setSelectedPost } = usePost()
 
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -58,8 +56,24 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
+
+  const usePostDialog = () => {
+    return new (class {
+      setShowEditDialog = setShowEditDialog
+      setShowPostDetailDialog = setShowPostDetailDialog
+    })()
+  }
+
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
+
+  const useComment = () => {
+    return new (class {
+      comments = comments
+      setComments = setComments
+      fetchComments = fetchComments
+    })()
+  }
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -160,23 +174,6 @@ const PostsManager = () => {
     setLoading(false)
   }
 
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
-  }
-
   // 게시물 업데이트
   const updatePost = async () => {
     try {
@@ -190,18 +187,6 @@ const PostsManager = () => {
       setShowEditDialog(false)
     } catch (error) {
       console.error("게시물 업데이트 오류:", error)
-    }
-  }
-
-  // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
     }
   }
 
@@ -289,25 +274,6 @@ const PostsManager = () => {
     }
   }
 
-  // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
-
   useEffect(() => {
     fetchTags()
   }, [])
@@ -332,11 +298,22 @@ const PostsManager = () => {
   }, [location.search])
 
   // widgets/post/ui
-  function PostTableItem(post: Post) {
+  function PostTableItem({ post }: { post: Post }) {
     // features/post/ui
     function PostOpenDetailButton({ post }: { post: Post }) {
+      const { setSelectedPost } = usePost()
+      const { fetchComments } = useComment()
+      const { setShowPostDetailDialog } = usePostDialog()
+
+      // 게시물 상세 보기
+      function handleOpenPostDetail(post) {
+        setSelectedPost(post)
+        fetchComments(post.id)
+        setShowPostDetailDialog(true)
+      }
+
       return (
-        <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+        <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
           <MessageSquare className="w-4 h-4" />
         </Button>
       )
@@ -344,6 +321,9 @@ const PostsManager = () => {
 
     // features/post/ui
     function PostShowEditDialogButton({ post }: { post: Post }) {
+      const { setSelectedPost } = usePost()
+      const { setShowEditDialog } = usePostDialog()
+
       return (
         <Button
           variant="ghost"
@@ -360,8 +340,20 @@ const PostsManager = () => {
 
     // features/post/ui
     function PostDeleteButton({ post }: { post: Post }) {
+      const { setPosts } = usePost()
+
+      // 게시물 삭제
+      async function handleDeletePost(id) {
+        try {
+          await fetch(`/api/posts/${id}`, { method: "DELETE" })
+          setPosts(posts.filter((post) => post.id !== id))
+        } catch (error) {
+          console.error("게시물 삭제 오류:", error)
+        }
+      }
+
       return (
-        <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+        <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
           <Trash2 className="w-4 h-4" />
         </Button>
       )
@@ -369,6 +361,18 @@ const PostsManager = () => {
 
     // features/post/ui
     function UserOpenDialogButton({ user }: { user: User }) {
+      // 사용자 모달 열기
+      const openUserModal = async (user) => {
+        try {
+          const response = await fetch(`/api/users/${user.id}`)
+          const userData = await response.json()
+          setSelectedUser(userData)
+          setShowUserModal(true)
+        } catch (error) {
+          console.error("사용자 정보 가져오기 오류:", error)
+        }
+      }
+
       return (
         <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(user)}>
           <img src={user?.image} alt={user?.username} className="w-8 h-8 rounded-full" />
@@ -377,36 +381,40 @@ const PostsManager = () => {
       )
     }
 
+    function TagBadge(tag: string) {
+      return (
+        <span
+          key={tag}
+          className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
+            selectedTag === tag
+              ? "text-white bg-blue-500 hover:bg-blue-600"
+              : "text-blue-800 bg-blue-100 hover:bg-blue-200"
+          }`}
+          onClick={() => {
+            setSelectedTag(tag)
+            updateURL()
+          }}
+        >
+          {tag}
+        </span>
+      )
+    }
+
     return (
       <TableRow key={post.id}>
         <TableCell>{post.id}</TableCell>
+
         <TableCell>
           <div className="space-y-1">
             <div>{highlightText(post.title, searchQuery)}</div>
-
-            <div className="flex flex-wrap gap-1">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-                    selectedTag === tag
-                      ? "text-white bg-blue-500 hover:bg-blue-600"
-                      : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-                  }`}
-                  onClick={() => {
-                    setSelectedTag(tag)
-                    updateURL()
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <div className="flex flex-wrap gap-1">{post.tags.map((tag) => TagBadge(tag))}</div>
           </div>
         </TableCell>
+
         <TableCell>
           <UserOpenDialogButton user={post.author} />
         </TableCell>
+
         <TableCell>
           <div className="flex items-center gap-2">
             <ThumbsUp className="w-4 h-4" />
@@ -415,6 +423,7 @@ const PostsManager = () => {
             <span>{post.reactions?.dislikes || 0}</span>
           </div>
         </TableCell>
+
         <TableCell>
           <div className="flex items-center gap-2">
             <PostOpenDetailButton post={post} />
@@ -438,7 +447,11 @@ const PostsManager = () => {
           <TableHead className="w-[150px]">작업</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>{posts.map((post) => PostTableItem(post))}</TableBody>
+      <TableBody>
+        {posts.map((post) => (
+          <PostTableItem post={post} />
+        ))}
+      </TableBody>
     </Table>
   )
 
@@ -489,6 +502,27 @@ const PostsManager = () => {
       </div>
     </div>
   )
+
+  function PostAddButton() {
+    // 게시물 추가
+    const addPost = async () => {
+      try {
+        const response = await fetch("/api/posts/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newPost),
+        })
+        const data = await response.json()
+        setPosts([data, ...posts])
+        setShowAddDialog(false)
+        setNewPost({ title: "", body: "", userId: 1 })
+      } catch (error) {
+        console.error("게시물 추가 오류:", error)
+      }
+    }
+
+    return <Button onClick={addPost}>게시물 추가</Button>
+  }
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -614,7 +648,7 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            {PostAddButton()}
           </div>
         </DialogContent>
       </Dialog>
