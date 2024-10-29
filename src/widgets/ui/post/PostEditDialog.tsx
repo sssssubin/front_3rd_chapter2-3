@@ -1,5 +1,5 @@
-import { usePostDialog } from "../../../features/post/ui/model/usePostDialog.ts"
-import { usePost } from "../../../features/post/ui/model/usePost.ts"
+import { usePostDialog } from "../../../features/post/model/usePostDialog.ts"
+import { usePost } from "../../../features/post/model/usePost.ts"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../../shared/ui"
 
 export function PostEditDialog() {

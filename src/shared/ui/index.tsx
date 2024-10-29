@@ -1,5 +1,5 @@
 import * as React from "react"
-import { forwardRef } from "react"
+import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Check, ChevronDown, X } from "lucide-react"
@@ -42,17 +42,33 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, v
 Button.displayName = "Button"
 
 // 입력 컴포넌트
-export const Input = forwardRef(({ className, type, ...props }, ref) => {
-  return (
-    <input
-      type={type}
-      className={`flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      ref={ref}
-      {...props}
-    />
-  )
-})
+export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        type={type}
+        className={`flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        {...props}
+      />
+    )
+  },
+)
 Input.displayName = "Input"
+
+// 텍스트 영역 컴포넌트
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={`flex min-h-[150px] w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        ref={ref}
+        {...props}
+      />
+    )
+  },
+)
+Textarea.displayName = "Textarea"
 
 // 카드 컴포넌트
 export const Card = forwardRef(({ className, ...props }, ref) => (
@@ -74,18 +90,6 @@ export const CardContent = forwardRef(({ className, ...props }, ref) => (
   <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
 ))
 CardContent.displayName = "CardContent"
-
-// 텍스트 영역 컴포넌트
-export const Textarea = forwardRef(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={`flex min-h-[150px] w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      ref={ref}
-      {...props}
-    />
-  )
-})
-Textarea.displayName = "Textarea"
 
 // 선택 컴포넌트
 export const Select = SelectPrimitive.Root
