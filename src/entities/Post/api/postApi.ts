@@ -1,0 +1,37 @@
+import { Post } from "../model/types"
+
+export const postApi = {
+  // 게시물 목록 조회
+  fetchPosts: async (limit: number, skip: number): Promise<Post[]> => {
+    const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
+    const data = await response.json()
+    return data.posts
+  },
+
+  // 게시물 추가
+  addPost: async (post: { title: string; body: string; userId: number }): Promise<Post> => {
+    const response = await fetch("/api/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(post),
+    })
+    return response.json()
+  },
+
+  // 게시물 수정
+  updatePost: async (id: number, post: Post): Promise<Post> => {
+    const response = await fetch(`/api/posts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(post),
+    })
+    return response.json()
+  },
+
+  // 게시물 삭제
+  deletePost: async (id: number): Promise<void> => {
+    await fetch(`/api/posts/${id}`, {
+      method: "DELETE",
+    })
+  },
+}
