@@ -17,6 +17,8 @@ export const usePostService = () => {
     setNewPost,
     selectedPost,
     setShowEditDialog,
+    searchQuery,
+    setSearchQuery,
   } = usePostStore()
 
   // 게시물 가져오기
@@ -81,10 +83,28 @@ export const usePostService = () => {
     }
   }
 
+  // 게시물 검색
+  const searchPosts = async () => {
+    if (!searchQuery) {
+      fetchPosts()
+      return
+    }
+    setLoading(true)
+    try {
+      const data = await postApi.searchPosts(searchQuery)
+      setPosts(data.posts)
+      setTotal(data.total)
+    } catch (error) {
+      console.error("게시물 검색 오류:", error)
+    }
+    setLoading(false)
+  }
+
   return {
     fetchPosts,
     addPost,
     updatePost,
     deletePost,
+    searchPosts,
   }
 }

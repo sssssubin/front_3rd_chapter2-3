@@ -58,6 +58,8 @@ const PostsManager = () => {
     setNewPost,
     loading,
     setLoading,
+    searchQuery,
+    setSearchQuery,
   } = usePostStore()
 
   const {
@@ -76,7 +78,6 @@ const PostsManager = () => {
   const { tags, setTags } = useTagStore()
 
   // 상태 관리
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
@@ -84,7 +85,7 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null)
 
-  const { fetchPosts, addPost, updatePost, deletePost } = usePostService()
+  const { fetchPosts, addPost, updatePost, deletePost, searchPosts } = usePostService()
   const { fetchComments, addComment, updateComment, deleteComment } = useCommentService()
   const { fetchTags } = useTagService()
 
@@ -98,24 +99,6 @@ const PostsManager = () => {
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
-  }
-
-  // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
-    setLoading(false)
   }
 
   // 태그별 게시물 가져오기

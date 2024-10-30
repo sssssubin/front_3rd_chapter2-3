@@ -34,4 +34,11 @@ export const postApi = {
       method: "DELETE",
     })
   },
+
+  // 게시물 검색
+  searchPosts: async (query: string) => {
+    const response = await fetch(`/api/posts/search?q=${query}`)
+    const data = await response.json()
+    return data
+  },
 }

@@ -15,6 +15,7 @@ interface PostState {
     userId: number
   }
   loading: boolean
+  searchQuery: string
   setPosts: (posts: Post[]) => void
   setTotal: (total: number) => void
   setSkip: (skip: number) => void
@@ -24,6 +25,7 @@ interface PostState {
   setShowEditDialog: (show: boolean) => void
   setNewPost: (post: { title: string; body: string; userId: number }) => void
   setLoading: (loading: boolean) => void
+  setSearchQuery: (searchQuery: string) => void
 }
 
 export const usePostStore = create<PostState>((set) => ({
@@ -36,6 +38,7 @@ export const usePostStore = create<PostState>((set) => ({
   showEditDialog: false,
   newPost: { title: "", body: "", userId: 1 },
   loading: false,
+  searchQuery: "",
   setPosts: (posts) => set({ posts }),
   setTotal: (total) => set({ total }),
   setSkip: (skip) => set({ skip }),
@@ -45,4 +48,5 @@ export const usePostStore = create<PostState>((set) => ({
   setShowEditDialog: (showEditDialog) => set({ showEditDialog }),
   setNewPost: (newPost) => set({ newPost }),
   setLoading: (loading) => set({ loading }),
+  setSearchQuery: (searchQuery) => set({ searchQuery }),
 }))
