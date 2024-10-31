@@ -7,10 +7,7 @@ export const usePostService = () => {
   const {
     posts,
     setPosts,
-    total,
     setTotal,
-    skip,
-    limit,
     setLoading,
     newPost,
     setShowAddDialog,
@@ -18,13 +15,13 @@ export const usePostService = () => {
     selectedPost,
     setShowEditDialog,
     searchQuery,
-    setSearchQuery,
   } = usePostStore()
 
   // 게시물 조회
-  const fetchPosts = async () => {
+  const fetchPosts = async ({ skip, limit }: { skip: number; limit: number; sortBy: string; sortOrder: string }) => {
     setLoading(true)
     try {
+      // limit과 skip을 파라미터에서 받은 값으로 사용
       const postsResponse = await postApi.getPosts(limit, skip)
       const users = await userApi.getUsers()
 
@@ -86,7 +83,14 @@ export const usePostService = () => {
   // 게시물 검색
   const searchPosts = async () => {
     if (!searchQuery) {
-      fetchPosts()
+      // 검색어가 없을 때는 현재 URL의 파라미터 값을 사용
+      const urlParams = new URLSearchParams(window.location.search)
+      await fetchPosts({
+        skip: parseInt(urlParams.get("skip") || "0"),
+        limit: parseInt(urlParams.get("limit") || "10"),
+        sortBy: urlParams.get("sortBy") || "",
+        sortOrder: urlParams.get("sortOrder") || "asc",
+      })
       return
     }
     setLoading(true)

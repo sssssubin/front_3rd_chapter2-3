@@ -14,3 +14,7 @@ export interface Post {
     image: string
   }
 }
+
+export interface PostDetail extends Post {
+  comments: Comment[]
+}
