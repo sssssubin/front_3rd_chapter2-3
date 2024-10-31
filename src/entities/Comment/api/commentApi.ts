@@ -29,7 +29,7 @@ export const commentApi = {
   },
 
   // 댓글 삭제
-  deleteComment: async (id: number, postId: string | number): Promise<void> => {
+  deleteComment: async (id: number): Promise<void> => {
     await fetch(`/api/comments/${id}`, {
       method: "DELETE",
     })

@@ -48,7 +48,7 @@ export const useDeleteComment = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, postId }: { id: number; postId: string | number }) => commentApi.deleteComment(id, postId),
+    mutationFn: ({ id }: { id: number; postId: string | number }) => commentApi.deleteComment(id),
     onSuccess: (_, variables) => {
       // 댓글 목록 갱신
       queryClient.invalidateQueries({

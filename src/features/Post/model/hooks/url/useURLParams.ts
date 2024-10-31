@@ -46,5 +46,6 @@ export const useURLParams = () => {
     if (params.has("tag")) {
       setSelectedTag(params.get("tag") || "")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
 }

@@ -22,5 +22,6 @@ export const usePostData = () => {
       sortBy,
       sortOrder,
     })
-  }, [location.search, selectedTag, sortBy, sortOrder]) // location.search를 의존성 배열에 추가
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search, selectedTag, sortBy, sortOrder]) // fetchPosts를 의존성 배열에 추가
 }

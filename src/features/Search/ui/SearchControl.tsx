@@ -1,18 +1,19 @@
 import { Search } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/ui"
 import { Input } from "../../../shared/ui"
-import { fetchPostsByTag } from "../../Post/ui/fetchPostsByTag"
 import { usePostStore } from "../../Post/model/stores/usePostStore"
 import { usePostManagerStore } from "../../../pages/model/stores/usePostManagerStore"
 import { useTagStore } from "../../Tag/model/stores/useTagStore"
 import { usePostService } from "../../Post/model/services/usePostService"
 import { useURLManager } from "../../Post/model/hooks/url/useURLManager"
+import { useFetchPostsByTag } from "../../Post/ui/fetchPostsByTag"
 
 export const SearchControl = () => {
   const { searchQuery, setSearchQuery } = usePostStore()
   const { tags } = useTagStore()
   const { searchPosts } = usePostService()
   const { updateURL } = useURLManager()
+  const fetchPostsByTag = useFetchPostsByTag()
 
   const { sortBy, setSortBy, sortOrder, setSortOrder, selectedTag, setSelectedTag } = usePostManagerStore()
 

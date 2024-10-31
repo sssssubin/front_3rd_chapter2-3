@@ -7,7 +7,6 @@ export const useCommentService = () => {
     selectedComment,
     newComment,
     setComments,
-    setSelectedComment,
     setNewComment,
     setShowAddCommentDialog,
     setShowEditCommentDialog,
@@ -65,7 +64,7 @@ export const useCommentService = () => {
   // 댓글 삭제
   const removeComment = async (id: number, postId: string | number) => {
     try {
-      await commentApi.deleteComment(id, postId)
+      await commentApi.deleteComment(id)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].filter((comment) => comment.id !== id),

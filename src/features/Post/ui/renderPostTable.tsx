@@ -44,7 +44,7 @@ export const RenderPostTable = () => {
                       }`}
                       onClick={() => {
                         setSelectedTag(tag)
-                        updateURL({ page: 1 })
+                        updateURL()
                       }}
                     >
                       {tag}

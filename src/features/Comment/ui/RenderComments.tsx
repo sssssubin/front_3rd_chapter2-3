@@ -4,7 +4,7 @@ import { highlightText } from "../../../shared/lib/highlightText"
 import { useCommentStore } from "../model/stores/useCommentStore"
 import { usePostStore } from "../../Post/model/stores/usePostStore"
 import { useCommentService } from "../model/services/useCommentService"
-import useLikeComment from "./useLikeComment"
+import { LikeComment } from "./LikeComment"
 
 export const RenderComments = (postId: number | string) => {
   const { searchQuery } = usePostStore()
@@ -35,7 +35,7 @@ export const RenderComments = (postId: number | string) => {
               <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => useLikeComment(comment.id, postId)}>
+              <Button variant="ghost" size="sm" onClick={() => LikeComment(comment.id, postId)}>
                 <ThumbsUp className="w-3 h-3" />
                 <span className="ml-1 text-xs">{comment.likes}</span>
               </Button>
