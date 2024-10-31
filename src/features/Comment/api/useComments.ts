@@ -19,7 +19,7 @@ export const useCreateComment = () => {
   return useMutation({
     mutationFn: (comment: { body: string; postId: number | string; userId: number }) =>
       commentApi.createComment(comment),
-    onSuccess: (_, variables) => {
+    onSuccess: (_: unknown, variables: { body: string; postId: number | string; userId: number }) => {
       // 댓글 목록 갱신
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.postId],
@@ -34,10 +34,10 @@ export const useUpdateComment = () => {
 
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: string }) => commentApi.updateComment(id, body),
-    onSuccess: (updatedComment) => {
+    onSuccess: (updatedComment: Comment) => {
       // 댓글이 속한 게시물의 댓글 목록 갱신
       queryClient.invalidateQueries({
-        queryKey: ["comments", (updatedComment as Comment).postId],
+        queryKey: ["comments", updatedComment.postId],
       })
     },
   })
@@ -49,7 +49,7 @@ export const useDeleteComment = () => {
 
   return useMutation({
     mutationFn: ({ id }: { id: number; postId: string | number }) => commentApi.deleteComment(id),
-    onSuccess: (_, variables) => {
+    onSuccess: (_: unknown, variables: { id: number; postId: string | number }) => {
       // 댓글 목록 갱신
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.postId],
