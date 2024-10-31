@@ -85,8 +85,8 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null)
 
-  const { fetchPosts, addPost, updatePost, deletePost, searchPosts } = usePostService()
-  const { fetchComments, addComment, updateComment, deleteComment } = useCommentService()
+  const { fetchPosts, addPost, editPost, removePost, searchPosts } = usePostService()
+  const { fetchComments, addComment, editComment, removeComment } = useCommentService()
   const { fetchTags } = useTagService()
 
   // URL 업데이트 함수
@@ -276,7 +276,7 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => removePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -325,7 +325,7 @@ const PostsManager = () => {
               >
                 <Edit2 className="w-3 h-3" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+              <Button variant="ghost" size="sm" onClick={() => removeComment(comment.id, postId)}>
                 <Trash2 className="w-3 h-3" />
               </Button>
             </div>
@@ -496,7 +496,7 @@ const PostsManager = () => {
                 }
               }}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={editPost}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -539,7 +539,7 @@ const PostsManager = () => {
                 }
               }}
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <Button onClick={editComment}>댓글 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>

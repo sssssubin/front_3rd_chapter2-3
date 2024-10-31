@@ -17,13 +17,13 @@ export const useCommentService = () => {
   const fetchComments = async (postId: string | number) => {
     if (comments[postId]) return
     try {
-      const fetchedComments = await commentApi.fetchComments(postId)
+      const fetchedComments = await commentApi.getComments(postId)
       setComments((prev) => ({
         ...prev,
         [postId]: Array.isArray(fetchedComments) ? fetchedComments : [],
       }))
     } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
+      console.error("댓글 조회 오류:", error)
     }
   }
 
@@ -31,7 +31,7 @@ export const useCommentService = () => {
   const addComment = async () => {
     if (!newComment.postId) return
     try {
-      const addedComment = await commentApi.addComment(
+      const addedComment = await commentApi.createComment(
         newComment as { body: string; postId: string | number; userId: number },
       )
       setComments((prev) => ({
@@ -46,7 +46,7 @@ export const useCommentService = () => {
   }
 
   // 댓글 수정
-  const updateComment = async () => {
+  const editComment = async () => {
     if (!selectedComment) return
     try {
       const updatedComment = await commentApi.updateComment(selectedComment.id, selectedComment.body)
@@ -58,12 +58,12 @@ export const useCommentService = () => {
       }))
       setShowEditCommentDialog(false)
     } catch (error) {
-      console.error("댓글 업데이트 오류:", error)
+      console.error("댓글 수정 오류:", error)
     }
   }
 
   // 댓글 삭제
-  const deleteComment = async (id: number, postId: string | number) => {
+  const removeComment = async (id: number, postId: string | number) => {
     try {
       await commentApi.deleteComment(id, postId)
       setComments((prev) => ({
@@ -78,7 +78,7 @@ export const useCommentService = () => {
   return {
     fetchComments,
     addComment,
-    updateComment,
-    deleteComment,
+    editComment,
+    removeComment,
   }
 }

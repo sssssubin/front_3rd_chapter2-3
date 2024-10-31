@@ -21,15 +21,15 @@ export const usePostService = () => {
     setSearchQuery,
   } = usePostStore()
 
-  // 게시물 가져오기
+  // 게시물 조회
   const fetchPosts = async () => {
     setLoading(true)
     try {
-      const postsResponse = await postApi.fetchPosts(limit, skip)
-      const users = await userApi.fetchUsers()
+      const postsResponse = await postApi.getPosts(limit, skip)
+      const users = await userApi.getUsers()
 
       if (!Array.isArray(postsResponse)) {
-        console.error("Unexpected response format:", postsResponse)
+        console.error("예상치 못한 응답 형식:", postsResponse)
         return
       }
 
@@ -41,7 +41,7 @@ export const usePostService = () => {
       setPosts(postsWithUsers)
       setTotal(postsResponse.length)
     } catch (error) {
-      console.error("Fetch posts error:", error)
+      console.error("게시물 조회 오류:", error)
       setPosts([])
     } finally {
       setLoading(false)
@@ -51,7 +51,7 @@ export const usePostService = () => {
   // 게시물 추가
   const addPost = async () => {
     try {
-      const data = await postApi.addPost(newPost)
+      const data = await postApi.createPost(newPost)
       setPosts([data, ...posts])
       setShowAddDialog(false)
       setNewPost({ title: "", body: "", userId: 1 })
@@ -60,8 +60,8 @@ export const usePostService = () => {
     }
   }
 
-  // 게시물 업데이트
-  const updatePost = async () => {
+  // 게시물 수정
+  const editPost = async () => {
     if (!selectedPost) return
     try {
       const data = await postApi.updatePost(selectedPost.id, selectedPost)
@@ -69,12 +69,12 @@ export const usePostService = () => {
       setPosts(updatedPosts)
       setShowEditDialog(false)
     } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
+      console.error("게시물 수정 오류:", error)
     }
   }
 
   // 게시물 삭제
-  const deletePost = async (id: number) => {
+  const removePost = async (id: number) => {
     try {
       await postApi.deletePost(id)
       setPosts(posts.filter((post) => post.id !== id))
@@ -91,7 +91,7 @@ export const usePostService = () => {
     }
     setLoading(true)
     try {
-      const data = await postApi.searchPosts(searchQuery)
+      const data = await postApi.searchPost(searchQuery)
       setPosts(data.posts)
       setTotal(data.total)
     } catch (error) {
@@ -103,8 +103,8 @@ export const usePostService = () => {
   return {
     fetchPosts,
     addPost,
-    updatePost,
-    deletePost,
+    editPost,
+    removePost,
     searchPosts,
   }
 }

@@ -2,14 +2,14 @@ import { Post } from "../model/types"
 
 export const postApi = {
   // 게시물 목록 조회
-  fetchPosts: async (limit: number, skip: number): Promise<Post[]> => {
+  getPosts: async (limit: number, skip: number): Promise<Post[]> => {
     const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
     const data = await response.json()
     return data.posts
   },
 
-  // 게시물 추가
-  addPost: async (post: { title: string; body: string; userId: number }): Promise<Post> => {
+  // 게시물 생성
+  createPost: async (post: { title: string; body: string; userId: number }): Promise<Post> => {
     const response = await fetch("/api/posts/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -36,7 +36,7 @@ export const postApi = {
   },
 
   // 게시물 검색
-  searchPosts: async (query: string) => {
+  searchPost: async (query: string) => {
     const response = await fetch(`/api/posts/search?q=${query}`)
     const data = await response.json()
     return data
