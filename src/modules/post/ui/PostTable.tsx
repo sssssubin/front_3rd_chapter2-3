@@ -1,10 +1,8 @@
-import { usePost } from "@/features/post/model/usePost.ts"
+import { Post } from "@/entities/post/model/Post.ts"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui"
 import { PostTableItem } from "./PostTableItem.tsx"
 
-export function PostTable() {
-  const { posts } = usePost()
-
+export function PostTable({ posts }: { posts: Post[] }) {
   return (
     <Table>
       <TableHeader>

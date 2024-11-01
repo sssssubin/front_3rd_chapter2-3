@@ -1,7 +1,8 @@
+import { Post } from "@/entities/post/model"
 import { atom, useAtom } from "jotai"
 
-const postsAtom = atom([])
-const selectedPostAtom = atom(null)
+const postsAtom = atom<Post[]>([])
+const selectedPostAtom = atom<Post | null>(null)
 const loadingAtom = atom(false)
 const totalAtom = atom(0)
 

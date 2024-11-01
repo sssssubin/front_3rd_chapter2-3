@@ -3,6 +3,7 @@ import type { Post, PostId } from "@/entities/post/model"
 import { usePost } from "@/features/post/model/usePost.ts"
 import { Button } from "@/shared/ui"
 import { Trash2 } from "lucide-react"
+import { deletePost } from "@/entities/post/api"
 
 export function PostDeleteButton({ post }: { post: Post }) {
   const { posts, setPosts } = usePost()
@@ -10,7 +11,7 @@ export function PostDeleteButton({ post }: { post: Post }) {
   // 게시물 삭제
   async function handleDeletePost(id: PostId) {
     try {
-      await fetch(`/api/posts/${id}`, { method: "DELETE" })
+      await deletePost(id)
       setPosts(posts.filter((post) => post.id !== id))
     } catch (error) {
       console.error("게시물 삭제 오류:", error)

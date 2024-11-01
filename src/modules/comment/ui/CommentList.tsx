@@ -6,7 +6,7 @@ import { useComment } from "@/features/comment/model/useComment.ts"
 import { useDialog } from "@/features/dialog/model/useDialog.ts"
 import { usePage } from "@/pages/model/usePage.ts"
 import { Button } from "@/shared/ui"
-import { highlightText } from "@/shared/ui/highlightText.tsx"
+import { highlightText } from "@/shared/lib/highlightText.tsx"
 
 // features/comment/model/useComment.ts
 async function patchCommentAddLike(comment: Comment) {

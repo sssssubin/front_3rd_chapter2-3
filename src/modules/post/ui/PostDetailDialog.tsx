@@ -2,7 +2,7 @@ import { usePost } from "@/features/post/model/usePost.ts"
 import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
 import { usePage } from "@/pages/model/usePage.ts"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui"
-import { highlightText } from "@/shared/ui/highlightText.tsx"
+import { highlightText } from "@/shared/lib/highlightText.tsx"
 import { CommentList } from "@/modules/comment/ui/CommentList.tsx"
 
 export default function PostDetailDialog() {
