@@ -1,28 +1,23 @@
-import { Comment, CommentList } from "@/entities/comment/model"
+import { Comment, CommentInput, CommentsOfPost } from "@/entities/comment/model"
+import { PostId } from "@/entities/post/model"
+import ky from "ky"
 
-export const fetchComments = async (postId: number): Promise<CommentList> => {
-  const response = await fetch(`/api/comments/post/${postId}`)
-  return response.json()
+export async function fetchCommentsByPostId(postId: PostId): Promise<CommentsOfPost> {
+  return ky.get(`/api/comments/post/${postId}`).json()
 }
 
-export const createComment = async (comment: Omit<Comment, "id">): Promise<Comment> => {
-  const response = await fetch("/api/comments", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(comment),
-  })
-  return response.json()
+export async function addComment(comment: CommentInput): Promise<Comment> {
+  return ky.post("/api/comments/add", { json: comment }).json()
 }
 
-export const deleteComment = async (id: number): Promise<void> => {
-  await fetch(`/api/comments/${id}`, { method: "DELETE" })
+export async function deleteComment(id: number): Promise<void> {
+  return await ky.delete(`/api/comments/${id}`).json()
 }
 
-export const putComment = async (id: number, comment: Partial<Comment>): Promise<Comment> => {
-  const response = await fetch(`/api/comments/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(comment),
-  })
-  return response.json()
+export async function putComment(id: number, comment: Partial<Comment>): Promise<Comment> {
+  return ky.put(`/api/comments/${id}`, { json: comment }).json()
+}
+
+export async function patchComment(postId: PostId, comment: Partial<Comment>): Promise<Comment> {
+  return ky.patch(`/api/comments/${postId}`, { json: comment }).json()
 }

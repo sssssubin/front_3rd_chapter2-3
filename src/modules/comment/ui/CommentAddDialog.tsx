@@ -1,27 +1,18 @@
+import { addComment } from "@/entities/comment/api"
 import { useComment } from "@/features/comment/model/useComment.ts"
 import { useDialog } from "@/features/dialog/model/useDialog.ts"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "@/shared/ui"
 
 export function CommentAddDialog() {
-  const { setComments } = useComment()
+  const { addCommentToPost } = useComment()
   const { newComment, setNewComment } = useComment()
   const { showAddCommentDialog, setShowAddCommentDialog } = useDialog()
 
   // 댓글 추가
   async function handleAddComment() {
     try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-
+      const data = await addComment(newComment)
+      addCommentToPost(data.postId, data)
       setShowAddCommentDialog(false)
       setNewComment({ body: "", postId: null, userId: 1 })
     } catch (error) {

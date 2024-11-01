@@ -1,8 +1,16 @@
-import { atom, useAtom } from "jotai"
-import { Comment, CommentInput, removeCommentByPostId, updateCommentByPostId } from "@/entities/comment/model"
+import {
+  addCommentToPost,
+  Comment,
+  CommentId,
+  CommentInput,
+  CommentList,
+  patchCommentByPostId,
+  removeCommentByPostId,
+} from "@/entities/comment/model"
 import { PostId } from "@/entities/post/model"
+import { atom, useAtom } from "jotai"
 
-const commentsAtom = atom<Record<PostId, Comment[]>>({})
+const commentsAtom = atom<CommentList>({})
 const selectedCommentAtom = atom<Comment | null>(null)
 const newCommentAtom = atom<CommentInput>({ body: "", postId: null, userId: 1 })
 
@@ -11,40 +19,29 @@ export const useComment = () => {
   const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
   const [newComment, setNewComment] = useAtom(newCommentAtom)
 
-  // 댓글 가져오기
-  const fetchComments = async (postId: PostId) => {
-    // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    if (comments[postId]) {
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error("댓글 가져오기 오류:", error)
-    }
-  }
-
   return new (class {
     comments = comments
     setComments = setComments
+
+    // 댓글 추가
+    addCommentToPost(postId: PostId, data: Comment) {
+      setComments((comments) => addCommentToPost(comments, postId, data))
+    }
+
+    // 댓글 수정
+    modifyComment(postId: PostId, commentId: CommentId, comment: Partial<Comment>) {
+      setComments((comments) => patchCommentByPostId(comments, postId, commentId, comment))
+    }
+
+    // 댓글 삭제
+    removeCommentByPostId(postId: PostId, commentId: CommentId) {
+      setComments((comments) => removeCommentByPostId(comments, postId, commentId))
+    }
 
     selectedComment = selectedComment
     setSelectedComment = setSelectedComment
 
     newComment = newComment
     setNewComment = setNewComment
-
-    fetchComments = fetchComments
-
-    updateCommentByPostId(postId: PostId, comment: Comment) {
-      setComments(updateCommentByPostId(postId, comment))
-    }
-
-    removeCommentByPostId(postId: PostId, commentId: number) {
-      setComments(removeCommentByPostId(postId, commentId))
-    }
   })()
 }

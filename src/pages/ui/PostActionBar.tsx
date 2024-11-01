@@ -1,3 +1,4 @@
+import { useQueryTags } from "@/features/tag/api"
 import { useTag } from "@/features/tag/model/useTag.ts"
 import { usePage } from "@/pages/model/usePage.ts"
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
@@ -5,8 +6,9 @@ import { Search } from "lucide-react"
 import { useState } from "react"
 
 export function PostActionBar() {
-  const { tags, selectedTag, setSelectedTag } = useTag()
+  const { selectedTag, setSelectedTag } = useTag()
   const { searchQuery, setSearchQuery, sortBy, setSortBy, sortOrder, setSortOrder } = usePage()
+  const { tags } = useQueryTags()
 
   const [searchInput, setSearchInput] = useState(searchQuery)
 

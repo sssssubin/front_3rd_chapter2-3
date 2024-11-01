@@ -1,11 +1,10 @@
-import { putComment } from "@/entities/comment/api"
-import { updateCommentByPostId } from "@/entities/comment/model"
+import { patchComment } from "@/entities/comment/api"
 import { useComment } from "@/features/comment/model/useComment.ts"
 import { useDialog } from "@/features/dialog/model/useDialog.ts"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "@/shared/ui"
 
 export function CommentEditDialog() {
-  const { selectedComment, setSelectedComment } = useComment()
+  const { selectedComment, setSelectedComment, modifyComment } = useComment()
   const { showEditCommentDialog, setShowEditCommentDialog } = useDialog()
 
   // 댓글 업데이트 핸들러
@@ -15,8 +14,8 @@ export function CommentEditDialog() {
     }
 
     try {
-      const data = await putComment(selectedComment.id, { body: selectedComment.body })
-      updateCommentByPostId(data.postId, data)
+      const data = await patchComment(selectedComment.postId, { body: selectedComment.body })
+      modifyComment(selectedComment.postId, selectedComment.id, data)
       setShowEditCommentDialog(false)
     } catch (error) {
       console.error("댓글 업데이트 오류:", error)
