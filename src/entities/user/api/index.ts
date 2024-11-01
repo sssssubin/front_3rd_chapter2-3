@@ -1,6 +1,5 @@
 import ky from "ky"
-import type { User } from "../model"
-
+import type { User } from "../model/User"
 interface UsersResponse {
   users: User[]
   total: number

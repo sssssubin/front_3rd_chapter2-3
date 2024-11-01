@@ -1,6 +1,7 @@
+import { Tag } from "@/entities/tag/model/Tag"
 import { atom, useAtom } from "jotai"
 
-const tagsAtom = atom([])
+const tagsAtom = atom<Tag[]>([])
 const selectedTagAtom = atom("")
 
 export const useTag = () => {
