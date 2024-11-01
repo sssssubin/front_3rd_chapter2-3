@@ -1,11 +1,9 @@
 import * as React from "react"
-import { type ElementRef } from "react"
-import { ComponentPropsWithRef, forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
+import { ComponentPropsWithRef, type ElementRef, forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Check, ChevronDown, X } from "lucide-react"
 import { cva, VariantProps } from "class-variance-authority"
-import { SelectTriggerProps } from "@radix-ui/react-select"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
@@ -72,28 +70,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<H
 )
 Textarea.displayName = "Textarea"
 
-// 카드 컴포넌트
-export const Card = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props} />
-))
-Card.displayName = "Card"
-
-export const CardHeader = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
-))
-CardHeader.displayName = "CardHeader"
-
-export const CardTitle = forwardRef(({ className, ...props }, ref) => (
-  <h3 ref={ref} className={`text-2xl font-semibold leading-none tracking-tight ${className}`} {...props} />
-))
-CardTitle.displayName = "CardTitle"
-
-export const CardContent = forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-// 선택 컴포넌트
 export const Select = SelectPrimitive.Root
 export const SelectGroup = SelectPrimitive.Group
 export const SelectValue = SelectPrimitive.Value
@@ -221,3 +197,5 @@ export const TableCell = forwardRef(({ className, ...props }, ref) => (
   <td ref={ref} className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 ${className}`} {...props} />
 ))
 TableCell.displayName = "TableCell"
+
+export * from "./Card" // 선택 컴포넌트
