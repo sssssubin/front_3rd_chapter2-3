@@ -9,13 +9,13 @@ export function PostShowEditDialogButton({ post }: { post: Post }) {
   const { setSelectedPost } = usePost()
   const { setShowEditDialog } = usePostDialog()
 
-  function handleShowEditDialog() {
+  function handleEditDialogOpen() {
     setSelectedPost(post)
     setShowEditDialog(true)
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={handleShowEditDialog}>
+    <Button variant="ghost" size="sm" onClick={handleEditDialogOpen}>
       <Edit2 className="w-4 h-4" />
     </Button>
   )

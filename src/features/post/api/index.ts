@@ -1,4 +1,4 @@
-import { fetchPosts, fetchPostsByTag, searchPosts } from "@/entities/post/api"
+import { fetchPosts, fetchPostsByTag, fetchPostsSearch } from "@/entities/post/api"
 import { fetchUserProfiles } from "@/entities/user/api"
 import { usePost } from "@/features/post/model/usePost.ts"
 import { useTag } from "@/features/tag/model/useTag"
@@ -58,7 +58,7 @@ export const useQueryPosts = () => {
     setLoading(true)
 
     try {
-      const data = await searchPosts(searchQuery)
+      const data = await fetchPostsSearch(searchQuery)
       setPosts(data.posts)
       setTotal(data.total)
     } catch (error) {

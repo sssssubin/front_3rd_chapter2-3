@@ -9,7 +9,7 @@ export function PostDeleteButton({ post }: { post: Post }) {
   const { posts, setPosts } = usePost()
 
   // 게시물 삭제
-  async function handleDeletePost(id: PostId) {
+  async function handlePostDelete(id: PostId) {
     try {
       await deletePost(id)
       setPosts(posts.filter((post) => post.id !== id))
@@ -19,7 +19,7 @@ export function PostDeleteButton({ post }: { post: Post }) {
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
+    <Button variant="ghost" size="sm" onClick={() => handlePostDelete(post.id)}>
       <Trash2 className="w-4 h-4" />
     </Button>
   )

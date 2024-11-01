@@ -9,7 +9,7 @@ export function UserOpenDialogButton({ user }: { user: User }) {
   const { setShowUserModal } = useDialog()
 
   // 사용자 모달 열기
-  async function handleOpenUserModal(user: User) {
+  async function handleUserModalOpen(user: User) {
     try {
       const userData = await fetchUser(user.id)
       setSelectedUser(userData)
@@ -20,7 +20,7 @@ export function UserOpenDialogButton({ user }: { user: User }) {
   }
 
   return (
-    <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleOpenUserModal(user)}>
+    <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleUserModalOpen(user)}>
       <img src={user?.image} alt={user?.username} className="w-8 h-8 rounded-full" />
       <span>{user?.username}</span>
     </div>

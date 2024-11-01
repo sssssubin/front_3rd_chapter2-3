@@ -10,6 +10,8 @@ const searchQueryAtom = atom(queryParams.get("search") || "")
 const sortByAtom = atom(queryParams.get("sortBy") || "")
 const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
 
+// @FIXME: Route 라이브러리로 교체할거라서 일단 주석처리
+
 export const usePage = () => {
   const navigate = useNavigate()
   const location = useLocation()

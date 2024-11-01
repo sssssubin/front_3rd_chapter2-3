@@ -14,16 +14,16 @@ export async function fetchPostsByTag(tag: string): Promise<PostsResponse> {
   return ky.get(`/api/posts/tag/${tag}`).json()
 }
 
+export async function fetchPostsSearch(query: string): Promise<PostsResponse> {
+  return ky.get(`/api/posts/search`, { searchParams: { q: query } }).json()
+}
+
 export async function addPost(post: PostInput): Promise<Post> {
   return ky.post("/api/posts/add", { json: post }).json()
 }
 
 export async function putPost(id: number, post: PostInput): Promise<Post> {
   return ky.put(`/api/posts/${id}`, { json: post }).json()
-}
-
-export async function searchPosts(query: string): Promise<PostsResponse> {
-  return ky.get(`/api/posts/search`, { searchParams: { q: query } }).json()
 }
 
 export function deletePost(id: number): Promise<void> {

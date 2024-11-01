@@ -15,7 +15,7 @@ export function CommentList({ postId }: { postId: PostId }) {
   const { setShowAddCommentDialog } = useDialog()
 
   // 댓글 추가 대화상자
-  function handleShowAddCommentDialog() {
+  function handleAddCommentDialogOpen() {
     setNewComment((prev) => ({ ...prev, postId }))
     setShowAddCommentDialog(true)
   }
@@ -24,7 +24,7 @@ export function CommentList({ postId }: { postId: PostId }) {
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">댓글</h3>
-        <Button size="sm" onClick={handleShowAddCommentDialog}>
+        <Button size="sm" onClick={handleAddCommentDialogOpen}>
           <Plus className="w-3 h-3 mr-1" />
           댓글 추가
         </Button>

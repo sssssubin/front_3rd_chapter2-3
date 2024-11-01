@@ -8,7 +8,7 @@ export function PostSearchInput() {
   const [searchInput, setSearchInput] = useState(searchQuery)
 
   // 게시물 검색
-  function handleSearchPosts() {
+  function handlePostsSearch() {
     setSearchQuery(searchInput)
   }
 
@@ -21,7 +21,7 @@ export function PostSearchInput() {
           className="pl-8"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearchPosts()}
+          onKeyDown={(e) => e.key === "Enter" && handlePostsSearch()}
         />
       </div>
     </div>

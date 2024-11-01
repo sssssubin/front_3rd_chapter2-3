@@ -7,8 +7,12 @@ export function CommentEditDialog() {
   const { selectedComment, setSelectedComment, modifyComment } = useComment()
   const { showEditCommentDialog, setShowEditCommentDialog } = useDialog()
 
+  function handleBodyChange(body: string): void {
+    setSelectedComment((selectedComment) => (!selectedComment ? null : { ...selectedComment, body }))
+  }
+
   // 댓글 업데이트 핸들러
-  async function handleUpdateComment() {
+  async function handleCommentUpdate() {
     if (!selectedComment) {
       return
     }
@@ -22,10 +26,6 @@ export function CommentEditDialog() {
     }
   }
 
-  function setCommentBody(body: string): void {
-    return setSelectedComment((selectedComment) => ({ ...selectedComment, body }))
-  }
-
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>
@@ -37,9 +37,9 @@ export function CommentEditDialog() {
           <Textarea
             placeholder="댓글 내용"
             value={selectedComment?.body || ""}
-            onChange={(e) => setCommentBody(e.target.value)}
+            onChange={(e) => handleBodyChange(e.target.value)}
           />
-          <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
+          <Button onClick={handleCommentUpdate}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -14,7 +14,7 @@ export function CommentListItem({ comment }: { key: Key; comment: Comment }) {
   const { searchQuery } = usePage()
 
   // 댓글 좋아요
-  async function handleLikeComment(comment: Comment) {
+  async function handleCommentLike(comment: Comment) {
     try {
       const data = await patchComment(comment.postId, { likes: comment.likes + 1 })
       modifyComment(comment.postId, comment.id, data)
@@ -24,13 +24,13 @@ export function CommentListItem({ comment }: { key: Key; comment: Comment }) {
   }
 
   // 댓글 수정 대화상자
-  function handleShowEditCommentDialog(comment: Comment) {
+  function handleEditCommentDialogOpen(comment: Comment) {
     setSelectedComment(comment)
     setShowEditCommentDialog(true)
   }
 
   // 댓글 삭제
-  async function handleDeleteComment(comment: Comment) {
+  async function handleCommentDelete(comment: Comment) {
     try {
       await deleteComment(comment.id)
       removeCommentByPostId(comment.postId, comment.id)
@@ -47,16 +47,16 @@ export function CommentListItem({ comment }: { key: Key; comment: Comment }) {
       </div>
 
       <div className="flex items-center space-x-1">
-        <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment)}>
+        <Button variant="ghost" size="sm" onClick={() => handleCommentLike(comment)}>
           <ThumbsUp className="w-3 h-3" />
           <span className="ml-1 text-xs">{comment.likes}</span>
         </Button>
 
-        <Button variant="ghost" size="sm" onClick={() => handleShowEditCommentDialog(comment)}>
+        <Button variant="ghost" size="sm" onClick={() => handleEditCommentDialogOpen(comment)}>
           <Edit2 className="w-3 h-3" />
         </Button>
 
-        <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment)}>
+        <Button variant="ghost" size="sm" onClick={() => handleCommentDelete(comment)}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>

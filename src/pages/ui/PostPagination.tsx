@@ -1,8 +1,10 @@
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
+import { usePost } from "@/features/post/model/usePost"
 import { usePage } from "@/pages/model/usePage.ts"
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
 
 export function PostPagination() {
-  const { limit, setLimit, skip, setSkip, total } = usePage()
+  const { limit, setLimit, skip, setSkip } = usePage()
+  const { total } = usePost()
 
   return (
     <div className="flex justify-between items-center">

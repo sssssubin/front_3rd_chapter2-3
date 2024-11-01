@@ -9,7 +9,7 @@ export function CommentAddDialog() {
   const { showAddCommentDialog, setShowAddCommentDialog } = useDialog()
 
   // 댓글 추가
-  async function handleAddComment() {
+  async function handleCommentAdd() {
     try {
       const data = await addComment(newComment)
       addCommentToPost(data.postId, data)
@@ -34,7 +34,7 @@ export function CommentAddDialog() {
             onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
           />
 
-          <Button onClick={handleAddComment}>댓글 추가</Button>
+          <Button onClick={handleCommentAdd}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -23,3 +23,7 @@ export interface Reactions {
 }
 
 export type PostInput = Partial<Post>
+
+export const addPosts = (posts: Post[], post: Post) => [post, ...posts]
+
+export const updatePosts = (posts: Post[], data: Post) => posts.map((post) => (post.id === data.id ? data : post))
