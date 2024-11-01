@@ -14,6 +14,7 @@ export const useQueryPosts = () => {
   // 게시물 가져오기
   const queryPosts = async () => {
     setLoading(true)
+
     try {
       const [postsData, usersData] = await Promise.all([fetchPosts(limit, skip), fetchUserProfiles()])
       const postsWithUsers = postsData.posts.map((post) => ({
@@ -37,6 +38,7 @@ export const useQueryPosts = () => {
       return
     }
     setLoading(true)
+
     try {
       const [postsData, usersData] = await Promise.all([fetchPostsByTag(tag), fetchUserProfiles()])
 
