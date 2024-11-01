@@ -20,7 +20,7 @@ function PostOpenDetailButton({ post }: { post: Post }) {
   const { setShowPostDetailDialog } = usePostDialog()
 
   // 게시물 상세 보기
-  function handleOpenPostDetail(post) {
+  function handleOpenPostDetail(post: Post) {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
@@ -55,7 +55,7 @@ function PostDeleteButton({ post }: { post: Post }) {
   const { posts, setPosts } = usePost()
 
   // 게시물 삭제
-  async function handleDeletePost(id) {
+  async function handleDeletePost(id: PostId) {
     try {
       await fetch(`/api/posts/${id}`, { method: "DELETE" })
       setPosts(posts.filter((post) => post.id !== id))
@@ -77,7 +77,7 @@ function UserOpenDialogButton({ user }: { user: User }) {
   const { setShowUserModal } = useDialog()
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()

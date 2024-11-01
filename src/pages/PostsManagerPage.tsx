@@ -28,6 +28,8 @@ import {
 } from "../shared/ui"
 import { highlightText } from "../shared/ui/highlightText.tsx"
 import { usePage } from "./model/usePage.ts"
+import { UserDialog } from "../modules/user/ui/UserDialog.tsx"
+import { useDialog } from "../features/dialog/model/useDialog.ts"
 
 function Pagination(
   limit: number,
@@ -66,6 +68,10 @@ function Pagination(
 }
 
 const PostsManager = () => {
+  const { showUserModal, setShowUserModal } = useDialog()
+
+  console.log("showUserModalshowUserModal", showUserModal)
+
   // 상태 관리
   const { setPosts, selectedPost } = usePost()
   const { showPostDetailDialog, setShowPostDetailDialog, setShowAddDialog } = usePostDialog()
@@ -73,9 +79,6 @@ const PostsManager = () => {
 
   const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
-
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser] = useState(null)
 
   // pages/model/usePage.ts
   const { skip, setSkip, limit, setLimit, searchQuery, sortBy, sortOrder } = usePage()
@@ -162,29 +165,48 @@ const PostsManager = () => {
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
-        </CardTitle>
-      </CardHeader>
+    <>
+      <Card className="w-full max-w-6xl mx-auto">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>게시물 관리자</span>
+            <Button onClick={() => setShowAddDialog(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              게시물 추가
+            </Button>
+          </CardTitle>
+        </CardHeader>
 
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {/* 검색 및 필터 컨트롤 */}
-          {PostActionBar()}
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            {/* 검색 및 필터 컨트롤 */}
+            {PostActionBar()}
 
-          {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
+            {/* 게시물 테이블 */}
+            {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
 
-          {/* 페이지네이션 */}
-          {Pagination(limit, setLimit, skip, setSkip, total)}
-        </div>
-      </CardContent>
+            {/* 페이지네이션 */}
+            {Pagination(limit, setLimit, skip, setSkip, total)}
+          </div>
+        </CardContent>
+
+        {/* 게시물 상세 보기 대화상자 */}
+        <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <p>{highlightText(selectedPost?.body, searchQuery)}</p>
+              <CommentList postId={selectedPost?.id} />
+            </div>
+          </DialogContent>
+        </Dialog>
+      </Card>
+
+      {/* 사용자 모달 */}
+      <UserDialog />
 
       {/* 게시물 추가 대화상자 */}
       <PostAddDialog />
@@ -197,54 +219,7 @@ const PostsManager = () => {
 
       {/* 댓글 수정 대화상자 */}
       {<CommentEditDialog />}
-
-      {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            <CommentList postId={selectedPost?.id} />
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </Card>
+    </>
   )
 
   function PostActionBar() {

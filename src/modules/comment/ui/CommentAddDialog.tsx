@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
 import { useComment } from "../../../features/comment/model/useComment"
 import { DialogHeader, Textarea, Button } from "../../../shared/ui"
 import { useDialog } from "../../../features/dialog/model/useDialog"
+import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
 
 export function CommentAddDialog() {
   const { setComments } = useComment()

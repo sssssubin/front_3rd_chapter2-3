@@ -1,6 +1,6 @@
 import { usePostDialog } from "../../features/post/model/usePostDialog.ts"
 import { useState } from "react"
-import { Post } from "../../entities/post/model/Post.ts"
+import { Post } from "../../entities/post/model"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 import { usePost } from "../../features/post/model/usePost.ts"
 

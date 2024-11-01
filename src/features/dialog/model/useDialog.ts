@@ -1,27 +1,21 @@
 import { atom, useAtom } from "jotai"
 
-const dialogsAtom = atom({
-  showPostDetailDialog: false,
-  showAddDialog: false,
-  showAddCommentDialog: false,
-  showEditCommentDialog: false,
-  showUserModal: false,
-})
+const showAddCommentDialogAtom = atom(false)
+const showEditCommentDialogAtom = atom(false)
+const showUserModalAtom = atom(false)
 
 export const useDialog = () => {
-  const [dialogs, setDialogs] = useAtom(dialogsAtom)
+  const [showAddCommentDialog, setShowAddCommentDialog] = useAtom(showAddCommentDialogAtom)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useAtom(showEditCommentDialogAtom)
+  const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
 
   return new (class {
-    showPostDetailDialog = dialogs.showPostDetailDialog
-    showAddDialog = dialogs.showAddDialog
-    showAddCommentDialog = dialogs.showAddCommentDialog
-    showEditCommentDialog = dialogs.showEditCommentDialog
-    showUserModal = dialogs.showUserModal
+    showAddCommentDialog = showAddCommentDialog
+    showEditCommentDialog = showEditCommentDialog
+    showUserModal = showUserModal
 
-    setShowPostDetailDialog = (show: boolean) => setDialogs((prev) => ({ ...prev, showPostDetailDialog: show }))
-    setShowAddDialog = (show: boolean) => setDialogs((prev) => ({ ...prev, showAddDialog: show }))
-    setShowAddCommentDialog = (show: boolean) => setDialogs((prev) => ({ ...prev, showAddCommentDialog: show }))
-    setShowEditCommentDialog = (show: boolean) => setDialogs((prev) => ({ ...prev, showEditCommentDialog: show }))
-    setShowUserModal = (show: boolean) => setDialogs((prev) => ({ ...prev, showUserModal: show }))
+    setShowAddCommentDialog = setShowAddCommentDialog
+    setShowEditCommentDialog = setShowEditCommentDialog
+    setShowUserModal = setShowUserModal
   })()
 }
