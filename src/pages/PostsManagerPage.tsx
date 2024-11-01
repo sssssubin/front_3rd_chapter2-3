@@ -30,20 +30,135 @@ import { highlightText } from "../shared/ui/highlightText.tsx"
 import { User } from "../entities/user/model/User.ts"
 import { usePost } from "../features/post/model/usePost.ts"
 import { usePostDialog } from "../features/post/model/usePostDialog.ts"
-import { PostEditDialog } from "../widgets/ui/post/PostEditDialog.tsx"
+import { PostEditDialog } from "../modules/post/PostEditDialog.tsx"
 import { useComment } from "../features/comment/model/useComment.ts"
-import { PostAddDialog } from "../widgets/ui/post/PostAddDialog.tsx"
+import { PostAddDialog } from "../modules/post/PostAddDialog.tsx"
+import { PostTable } from "../modules/post/PostTable.tsx"
+import { useTag } from "../features/tag/model/useTag.ts"
+
+function PagiNation(
+  limit: number,
+  setLimit: (value: ((prevState: number) => number) | number) => void,
+  skip: number,
+  setSkip: (value: ((prevState: number) => number) | number) => void,
+  total: number,
+) {
+  return (
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
+        <span>표시</span>
+        <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="10" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="20">20</SelectItem>
+            <SelectItem value="30">30</SelectItem>
+          </SelectContent>
+        </Select>
+        <span>항목</span>
+      </div>
+      <div className="flex gap-2">
+        <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
+          이전
+        </Button>
+        <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
+          다음
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function ControlPanel(
+  searchQuery: string,
+  setSearchQuery: (value: ((prevState: string) => string) | string) => void,
+  searchPosts: () => Promise<void>,
+  selectedTag: string,
+  setSelectedTag: (value: ((prevState: string) => string) | string) => void,
+  fetchPostsByTag: (tag) => Promise<void>,
+  tags: any[],
+  sortBy: string,
+  setSortBy: (value: ((prevState: string) => string) | string) => void,
+  sortOrder: string,
+  setSortOrder: (value: ((prevState: string) => string) | string) => void,
+) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <div className="relative">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="게시물 검색..."
+            className="pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+          />
+        </div>
+      </div>
+      <Select
+        value={selectedTag}
+        onValueChange={(value) => {
+          setSelectedTag(value)
+          fetchPostsByTag(value)
+        }}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="태그 선택" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">모든 태그</SelectItem>
+          {tags.map((tag) => (
+            <SelectItem key={tag.url} value={tag.slug}>
+              {tag.slug}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select value={sortBy} onValueChange={setSortBy}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="정렬 기준" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">없음</SelectItem>
+          <SelectItem value="id">ID</SelectItem>
+          <SelectItem value="title">제목</SelectItem>
+          <SelectItem value="reactions">반응</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select value={sortOrder} onValueChange={setSortOrder}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="정렬 순서" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="asc">오름차순</SelectItem>
+          <SelectItem value="desc">내림차순</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
 
 const PostsManager = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
-
   // 상태 관리
-
   const { posts, setPosts, selectedPost } = usePost()
   const { showPostDetailDialog, setShowPostDetailDialog, setShowAddDialog } = usePostDialog()
   const { comments, setComments, selectedComment, setSelectedComment, setNewComment } = useComment()
+  const { tags, setTags, selectedTag, setSelectedTag } = useTag()
+
+  const [loading, setLoading] = useState(false)
+
+  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
+  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+
+  const [showUserModal, setShowUserModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
 
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
@@ -51,17 +166,9 @@ const PostsManager = () => {
   const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
-  const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
 
   // URL 업데이트 함수
-  const updateURL = () => {
+  useEffect(() => {
     const params = new URLSearchParams()
     if (skip) params.set("skip", skip.toString())
     if (limit) params.set("limit", limit.toString())
@@ -70,7 +177,7 @@ const PostsManager = () => {
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
-  }
+  }, [tags, selectedTag, skip, limit, searchQuery, sortBy, sortOrder])
 
   // 게시물 가져오기
   const fetchPosts = () => {
@@ -213,7 +320,7 @@ const PostsManager = () => {
 
   useEffect(() => {
     fetchTags()
-  }, [])
+  }, [fetchTags])
 
   useEffect(() => {
     if (selectedTag) {
@@ -221,8 +328,7 @@ const PostsManager = () => {
     } else {
       fetchPosts()
     }
-    updateURL()
-  }, [skip, limit, sortBy, sortOrder, selectedTag])
+  }, [skip, limit, sortBy, sortOrder, selectedTag, fetchPostsByTag, fetchPosts])
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -233,162 +339,6 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
-
-  // widgets/post/ui
-  function PostTableItem({ post }: { post: Post }) {
-    // features/post/ui
-    function PostOpenDetailButton({ post }: { post: Post }) {
-      const { setSelectedPost } = usePost()
-      const { fetchComments } = useComment()
-      const { setShowPostDetailDialog } = usePostDialog()
-
-      // 게시물 상세 보기
-      function handleOpenPostDetail(post) {
-        setSelectedPost(post)
-        fetchComments(post.id)
-        setShowPostDetailDialog(true)
-      }
-
-      return (
-        <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
-          <MessageSquare className="w-4 h-4" />
-        </Button>
-      )
-    }
-
-    // features/post/ui
-    function PostShowEditDialogButton({ post }: { post: Post }) {
-      const { setSelectedPost } = usePost()
-      const { setShowEditDialog } = usePostDialog()
-
-      function handleShowEditDialog() {
-        setSelectedPost(post)
-        setShowEditDialog(true)
-      }
-
-      return (
-        <Button variant="ghost" size="sm" onClick={handleShowEditDialog}>
-          <Edit2 className="w-4 h-4" />
-        </Button>
-      )
-    }
-
-    // features/post/ui
-    function PostDeleteButton({ post }: { post: Post }) {
-      const { setPosts } = usePost()
-
-      // 게시물 삭제
-      async function handleDeletePost(id) {
-        try {
-          await fetch(`/api/posts/${id}`, { method: "DELETE" })
-          setPosts(posts.filter((post) => post.id !== id))
-        } catch (error) {
-          console.error("게시물 삭제 오류:", error)
-        }
-      }
-
-      return (
-        <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
-          <Trash2 className="w-4 h-4" />
-        </Button>
-      )
-    }
-
-    // features/post/ui
-    function UserOpenDialogButton({ user }: { user: User }) {
-      // 사용자 모달 열기
-      const openUserModal = async (user) => {
-        try {
-          const response = await fetch(`/api/users/${user.id}`)
-          const userData = await response.json()
-          setSelectedUser(userData)
-          setShowUserModal(true)
-        } catch (error) {
-          console.error("사용자 정보 가져오기 오류:", error)
-        }
-      }
-
-      return (
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(user)}>
-          <img src={user?.image} alt={user?.username} className="w-8 h-8 rounded-full" />
-          <span>{user?.username}</span>
-        </div>
-      )
-    }
-
-    function TagBadge(tag: string) {
-      return (
-        <span
-          key={tag}
-          className={`px-1 text-[9px] font-semibold rounded-[4px] cursor-pointer ${
-            selectedTag === tag
-              ? "text-white bg-blue-500 hover:bg-blue-600"
-              : "text-blue-800 bg-blue-100 hover:bg-blue-200"
-          }`}
-          onClick={() => {
-            setSelectedTag(tag)
-            updateURL()
-          }}
-        >
-          {tag}
-        </span>
-      )
-    }
-
-    return (
-      <TableRow key={post.id}>
-        <TableCell>{post.id}</TableCell>
-
-        <TableCell>
-          <div className="space-y-1">
-            <div>{highlightText(post.title, searchQuery)}</div>
-            <div className="flex flex-wrap gap-1">{post.tags.map((tag) => TagBadge(tag))}</div>
-          </div>
-        </TableCell>
-
-        <TableCell>
-          <UserOpenDialogButton user={post.author} />
-        </TableCell>
-
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <ThumbsUp className="w-4 h-4" />
-            <span>{post.reactions?.likes || 0}</span>
-            <ThumbsDown className="w-4 h-4" />
-            <span>{post.reactions?.dislikes || 0}</span>
-          </div>
-        </TableCell>
-
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <PostOpenDetailButton post={post} />
-            <PostShowEditDialogButton post={post} />
-            <PostDeleteButton post={post} />
-          </div>
-        </TableCell>
-      </TableRow>
-    )
-  }
-
-  // 게시물 테이블 렌더링
-  const renderPostTable = () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">ID</TableHead>
-          <TableHead>제목</TableHead>
-          <TableHead className="w-[150px]">작성자</TableHead>
-          <TableHead className="w-[150px]">반응</TableHead>
-          <TableHead className="w-[150px]">작업</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {posts.map((post) => (
-          <PostTableItem post={post} />
-        ))}
-      </TableBody>
-    </Table>
-  )
 
   // 댓글 렌더링
   const renderComments = (postId) => (
@@ -406,6 +356,7 @@ const PostsManager = () => {
           댓글 추가
         </Button>
       </div>
+
       <div className="space-y-1">
         {comments[postId]?.map((comment) => (
           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
@@ -498,89 +449,25 @@ const PostsManager = () => {
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && searchPosts()}
-                />
-              </div>
-            </div>
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value)
-                fetchPostsByTag(value)
-                updateURL()
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 기준" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">없음</SelectItem>
-                <SelectItem value="id">ID</SelectItem>
-                <SelectItem value="title">제목</SelectItem>
-                <SelectItem value="reactions">반응</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 순서" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">오름차순</SelectItem>
-                <SelectItem value="desc">내림차순</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {ControlPanel(
+            searchQuery,
+            setSearchQuery,
+            searchPosts,
+            selectedTag,
+            setSelectedTag,
+            fetchPostsByTag,
+            tags,
+            sortBy,
+            setSortBy,
+            sortOrder,
+            setSortOrder,
+          )}
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable />}
 
           {/* 페이지네이션 */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span>표시</span>
-              <Select value={limit.toString()} onValueChange={(value) => setLimit(Number(value))}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="10" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
-                </SelectContent>
-              </Select>
-              <span>항목</span>
-            </div>
-            <div className="flex gap-2">
-              <Button disabled={skip === 0} onClick={() => setSkip(Math.max(0, skip - limit))}>
-                이전
-              </Button>
-              <Button disabled={skip + limit >= total} onClick={() => setSkip(skip + limit)}>
-                다음
-              </Button>
-            </div>
-          </div>
+          {PagiNation(limit, setLimit, skip, setSkip, total)}
         </div>
       </CardContent>
 
