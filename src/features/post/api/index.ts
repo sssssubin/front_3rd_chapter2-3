@@ -1,5 +1,5 @@
 import { fetchPosts, fetchPostsByTag, searchPosts } from "@/entities/post/api"
-import { fetchUsers } from "@/entities/user/api"
+import { fetchUserProfiles } from "@/entities/user/api"
 import { usePost } from "@/features/post/model/usePost.ts"
 import { useTag } from "@/features/tag/model/useTag"
 import { usePage } from "@/pages/model/usePage.ts"
@@ -15,7 +15,7 @@ export const useQueryPosts = () => {
   const queryPosts = async () => {
     setLoading(true)
     try {
-      const [postsData, usersData] = await Promise.all([fetchPosts(limit, skip), fetchUsers()])
+      const [postsData, usersData] = await Promise.all([fetchPosts(limit, skip), fetchUserProfiles()])
       const postsWithUsers = postsData.posts.map((post) => ({
         ...post,
         author: usersData.users.find((user) => user.id === post.userId),
@@ -38,7 +38,7 @@ export const useQueryPosts = () => {
     }
     setLoading(true)
     try {
-      const [postsData, usersData] = await Promise.all([fetchPostsByTag(tag), fetchUsers()])
+      const [postsData, usersData] = await Promise.all([fetchPostsByTag(tag), fetchUserProfiles()])
 
       const postsWithUsers = postsData.posts.map((post) => ({
         ...post,

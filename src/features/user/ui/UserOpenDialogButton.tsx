@@ -1,4 +1,5 @@
 // features/user/ui
+import { fetchUser } from "@/entities/user/api"
 import type { User } from "@/entities/user/model/User.ts"
 import { useDialog } from "@/features/dialog/model/useDialog.ts"
 import { useUser } from "@/features/user/model/useUser.ts"
@@ -10,8 +11,7 @@ export function UserOpenDialogButton({ user }: { user: User }) {
   // 사용자 모달 열기
   async function handleOpenUserModal(user: User) {
     try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
+      const userData = await fetchUser(user.id)
       setSelectedUser(userData)
       setShowUserModal(true)
     } catch (error) {

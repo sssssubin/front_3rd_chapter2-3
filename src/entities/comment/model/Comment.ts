@@ -59,14 +59,6 @@ export const patchCommentByPostId = (
   },
 })
 
-export const updateCommentByPostId = (postId: PostId, data: Comment) => (prev: CommentList) => ({
-  ...prev,
-  [postId]: {
-    ...prev[postId],
-    comments: prev[postId]?.comments.map((comment) => (comment.id === data.id ? data : comment)),
-  },
-})
-
 export const removeCommentByPostId = (comments: CommentList, postId: PostId, commentId: CommentId) => ({
   ...comments,
   [postId]: {

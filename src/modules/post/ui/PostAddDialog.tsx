@@ -1,31 +1,27 @@
-import { useState } from "react"
-import { Post } from "@/entities/post/model"
+import { addPost } from "@/entities/post/api"
+import { PostInput } from "@/entities/post/model"
 import { usePost } from "@/features/post/model/usePost.ts"
 import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "@/shared/ui"
+import { useState } from "react"
 
 export function PostAddDialog() {
   const { showAddDialog, setShowAddDialog } = usePostDialog()
-  const { posts, setPosts } = usePost()
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const { setPosts } = usePost()
+
+  const [newPost, setNewPost] = useState<PostInput>({ title: "", body: "", userId: 1 })
 
   // 게시물 추가
-  async function handleAddPost(newPost: Post) {
+  async function handleAddPost(newPost: PostInput) {
     try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-
+      const data = await addPost(newPost)
       const post = {
         ...data,
         tags: [],
         reactions: { likes: 0, dislikes: 0 },
       }
+      setPosts((posts) => [post, ...posts])
 
-      setPosts([post, ...posts])
       setShowAddDialog(false)
       setNewPost({
         title: "",
@@ -33,7 +29,6 @@ export function PostAddDialog() {
         userId: 121,
         tags: [],
         reactions: { likes: 0, dislikes: 0 },
-        comments: [],
       })
     } catch (error) {
       console.error("게시물 추가 오류:", error)

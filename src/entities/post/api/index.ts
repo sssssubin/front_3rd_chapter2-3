@@ -1,5 +1,5 @@
 import ky from "ky"
-import type { Post } from "../model"
+import type { Post, PostInput } from "../model"
 
 interface PostsResponse {
   posts: Post[]
@@ -12,6 +12,14 @@ export async function fetchPosts(limit: number, skip: number): Promise<PostsResp
 
 export async function fetchPostsByTag(tag: string): Promise<PostsResponse> {
   return ky.get(`/api/posts/tag/${tag}`).json()
+}
+
+export async function addPost(post: PostInput): Promise<Post> {
+  return ky.post("/api/posts/add", { json: post }).json()
+}
+
+export async function putPost(id: number, post: PostInput): Promise<Post> {
+  return ky.put(`/api/posts/${id}`, { json: post }).json()
 }
 
 export async function searchPosts(query: string): Promise<PostsResponse> {

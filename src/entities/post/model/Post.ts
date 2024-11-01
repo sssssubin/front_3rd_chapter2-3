@@ -21,3 +21,5 @@ export interface Reactions {
   likes: number
   dislikes: number
 }
+
+export type PostInput = Partial<Post>

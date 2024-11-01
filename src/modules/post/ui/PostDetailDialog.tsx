@@ -10,16 +10,17 @@ export default function PostDetailDialog() {
   const { selectedPost } = usePost()
   const { searchQuery } = usePage()
 
+  if (!selectedPost) return null
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
+          <DialogTitle>{highlightText(selectedPost.title, searchQuery)}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-          <CommentList postId={selectedPost?.id} />
+          <p>{highlightText(selectedPost.body, searchQuery)}</p>
+          <CommentList postId={selectedPost.id} />
         </div>
       </DialogContent>
     </Dialog>

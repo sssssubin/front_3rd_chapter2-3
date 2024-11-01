@@ -11,11 +11,7 @@ export async function addComment(comment: CommentInput): Promise<Comment> {
 }
 
 export async function deleteComment(id: number): Promise<void> {
-  return await ky.delete(`/api/comments/${id}`).json()
-}
-
-export async function putComment(id: number, comment: Partial<Comment>): Promise<Comment> {
-  return ky.put(`/api/comments/${id}`, { json: comment }).json()
+  return ky.delete(`/api/comments/${id}`).json()
 }
 
 export async function patchComment(postId: PostId, comment: Partial<Comment>): Promise<Comment> {

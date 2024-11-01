@@ -1,7 +1,7 @@
 import { fetchCommentsByPostId } from "@/entities/comment/api"
 import { PostId } from "@/entities/post/model"
 import { useComment } from "@/features/comment/model/useComment.ts"
-import { useEffect, useMemo } from "react"
+import { useEffect } from "react"
 
 export function useQueryComments(postId: PostId) {
   const { comments, setComments } = useComment()
@@ -23,10 +23,7 @@ export function useQueryComments(postId: PostId) {
     void queryComments(postId)
   }, [postId, comments, setComments])
 
-  // const commentsOfPost = useMemo(() => comments[postId]?.comments || [], [comments, postId])
   const commentsOfPost = comments[postId]?.comments || []
-
-  console.log("commentsOfPost", commentsOfPost)
 
   return new (class {
     commentsOfPost = commentsOfPost
