@@ -10,8 +10,6 @@ const searchQueryAtom = atom(queryParams.get("search") || "")
 const sortByAtom = atom(queryParams.get("sortBy") || "")
 const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
 
-export const totalAtom = atom(0)
-
 export const usePage = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -22,7 +20,6 @@ export const usePage = () => {
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom)
   const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
-  const [total, setTotal] = useAtom(totalAtom)
 
   const { selectedTag, setSelectedTag } = useTag()
 
@@ -60,7 +57,5 @@ export const usePage = () => {
     setSortBy = setSortBy
     sortOrder = sortOrder
     setSortOrder = setSortOrder
-    total = total
-    setTotal = setTotal
   })()
 }

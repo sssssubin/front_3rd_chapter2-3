@@ -1,78 +1,20 @@
 // widgets/post/ui
-import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { Key } from "react"
 import { Post } from "@/entities/post/model"
 import { User } from "@/entities/user/model/User.ts"
-import { useComment } from "@/features/comment/model/useComment.ts"
 import { useDialog } from "@/features/dialog/model/useDialog.ts"
-import { usePost } from "@/features/post/model/usePost.ts"
-import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
-import { TagBadge } from "../../features/tag/ui/TagBadge.tsx"
+import { PostDeleteButton } from "@/features/post/ui/PostDeleteButton.tsx"
+import { PostOpenDetailButton } from "@/features/post/ui/PostOpenDetailButton.tsx"
+import { PostShowEditDialogButton } from "@/features/post/ui/PostShowEditDialogButton.tsx"
 import { useUser } from "@/features/user/model/useUser.ts"
 import { usePage } from "@/pages/model/usePage.ts"
-import { Button, TableCell, TableRow } from "@/shared/ui"
+import { TableCell, TableRow } from "@/shared/ui"
 import { highlightText } from "@/shared/ui/highlightText.tsx"
+import { ThumbsDown, ThumbsUp } from "lucide-react"
+import { Key } from "react"
+import { TagBadge } from "../../../features/tag/ui/TagBadge.tsx"
 
-// features/post/ui
-function PostOpenDetailButton({ post }: { post: Post }) {
-  const { setSelectedPost } = usePost()
-  const { fetchComments } = useComment()
-  const { setShowPostDetailDialog } = usePostDialog()
-
-  // 게시물 상세 보기
-  function handleOpenPostDetail(post: Post) {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
-
-  return (
-    <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
-      <MessageSquare className="w-4 h-4" />
-    </Button>
-  )
-}
-
-// features/post/ui
-function PostShowEditDialogButton({ post }: { post: Post }) {
-  const { setSelectedPost } = usePost()
-  const { setShowEditDialog } = usePostDialog()
-
-  function handleShowEditDialog() {
-    setSelectedPost(post)
-    setShowEditDialog(true)
-  }
-
-  return (
-    <Button variant="ghost" size="sm" onClick={handleShowEditDialog}>
-      <Edit2 className="w-4 h-4" />
-    </Button>
-  )
-}
-
-// features/post/ui
-function PostDeleteButton({ post }: { post: Post }) {
-  const { posts, setPosts } = usePost()
-
-  // 게시물 삭제
-  async function handleDeletePost(id: PostId) {
-    try {
-      await fetch(`/api/posts/${id}`, { method: "DELETE" })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
-    }
-  }
-
-  return (
-    <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
-      <Trash2 className="w-4 h-4" />
-    </Button>
-  )
-}
-
-// features/post/ui
-function UserOpenDialogButton({ user }: { user: User }) {
+// features/user/ui
+export function UserOpenDialogButton({ user }: { user: User }) {
   const { setSelectedUser } = useUser()
   const { setShowUserModal } = useDialog()
 
