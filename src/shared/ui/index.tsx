@@ -1,9 +1,11 @@
 import * as React from "react"
-import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
+import { type ElementRef } from "react"
+import { ComponentPropsWithRef, forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Check, ChevronDown, X } from "lucide-react"
 import { cva, VariantProps } from "class-variance-authority"
+import { SelectTriggerProps } from "@radix-ui/react-select"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
@@ -122,7 +124,10 @@ export const SelectContent = forwardRef(({ className, children, position = "popp
 ))
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
-export const SelectItem = forwardRef(({ className, children, ...props }, ref) => (
+export const SelectItem = forwardRef<
+  ElementRef<typeof SelectPrimitive.Item>,
+  ComponentPropsWithRef<typeof SelectPrimitive.Item>
+>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={`relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${className}`}

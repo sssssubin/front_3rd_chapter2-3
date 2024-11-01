@@ -1,14 +1,13 @@
-import { useState } from "react"
-import { atom } from "jotai"
+import { atom, useAtom } from "jotai"
 
 const commentsAtom = atom({})
 const selectedCommentAtom = atom(null)
 const newCommentAtom = atom({ body: "", postId: null, userId: 1 })
 
 export const useComment = () => {
-  const [comments, setComments] = useState(commentsAtom)
-  const [selectedComment, setSelectedComment] = useState(selectedCommentAtom)
-  const [newComment, setNewComment] = useState(newCommentAtom)
+  const [comments, setComments] = useAtom(commentsAtom)
+  const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
+  const [newComment, setNewComment] = useAtom(newCommentAtom)
 
   // 댓글 가져오기
   const fetchComments = async (postId) => {
