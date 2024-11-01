@@ -1,21 +1,15 @@
 import { fetchPosts, fetchPostsByTag, searchPosts } from "@/entities/post/api"
-import { fetchTags } from "@/entities/tag/api"
 import { fetchUsers } from "@/entities/user/api"
 import { usePost } from "@/features/post/model/usePost.ts"
+import { useTag } from "@/features/tag/model/useTag"
 import { usePage } from "@/pages/model/usePage.ts"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
-interface UsePostsQueryResult {
-  posts: PostWithAuthor[]
-  isLoading: boolean
-  total: number
-}
-
-export const useQueryPosts = ({ limit, skip, tag, searchQuery }: UsePostsQueryParams) => {
-  // pages/model/usePage.ts
+export const useQueryPosts = () => {
   const { searchQuery, skip, limit, sortBy, sortOrder } = usePage()
-  const { setTotal } = usePost()
+  const { total, setTotal } = usePost()
   const { posts, setPosts, loading, setLoading } = usePost()
+  const { selectedTag } = useTag()
 
   // 게시물 가져오기
   const queryPosts = async () => {
@@ -75,10 +69,6 @@ export const useQueryPosts = ({ limit, skip, tag, searchQuery }: UsePostsQueryPa
   }
 
   useEffect(() => {
-    queryTags()
-  }, [])
-
-  useEffect(() => {
     if (searchQuery) {
       querySearchPosts(searchQuery)
     } else if (selectedTag) {
@@ -93,24 +83,4 @@ export const useQueryPosts = ({ limit, skip, tag, searchQuery }: UsePostsQueryPa
     loading = loading
     total = total
   })()
-}
-
-export const useQueryTags = () => {
-  const [tags, setTags] = useState([])
-
-  // 태그 가져오기
-  const queryTags = async () => {
-    try {
-      const data = await fetchTags()
-      setTags(data)
-    } catch (error) {
-      console.error("태그 가져오기 오류:", error)
-    }
-  }
-
-  useEffect(() => {
-    queryTags()
-  }, [])
-
-  return { tags }
 }
