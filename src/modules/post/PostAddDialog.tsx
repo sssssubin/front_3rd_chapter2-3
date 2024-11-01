@@ -1,8 +1,8 @@
-import { usePostDialog } from "../../features/post/model/usePostDialog.ts"
 import { useState } from "react"
-import { Post } from "../../entities/post/model"
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
-import { usePost } from "../../features/post/model/usePost.ts"
+import { Post } from "@/entities/post/model"
+import { usePost } from "@/features/post/model/usePost.ts"
+import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "@/shared/ui"
 
 export function PostAddDialog() {
   const { showAddDialog, setShowAddDialog } = usePostDialog()

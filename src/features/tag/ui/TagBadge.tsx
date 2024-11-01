@@ -1,5 +1,5 @@
-import { useTag } from "../model/useTag.ts"
 import { Key } from "react"
+import { useTag } from "@/features/tag/model/useTag.ts"
 
 export function TagBadge({ tag }: { key: Key; tag: string }) {
   const { selectedTag, setSelectedTag } = useTag()

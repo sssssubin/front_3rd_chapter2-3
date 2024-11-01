@@ -1,7 +1,7 @@
 import { atom, useAtom } from "jotai"
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useTag } from "../../features/tag/model/useTag.ts"
+import { useTag } from "@/features/tag/model/useTag.ts"
 
 const queryParams = new URLSearchParams(location.search)
 const skipAtom = atom(parseInt(queryParams.get("skip") || "0"))

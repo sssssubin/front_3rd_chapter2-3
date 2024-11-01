@@ -1,4 +1,4 @@
-import { PostId } from "../../post/model"
+import { PostId } from "@/entities/post/model"
 
 export interface Comment {
   id: number

@@ -1,12 +1,12 @@
 // 댓글 렌더링
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import type { Comment } from "../../../entities/comment/model"
-import { PostId } from "../../../entities/post/model"
-import { useComment } from "../../../features/comment/model/useComment.ts"
-import { useDialog } from "../../../features/dialog/model/useDialog.ts"
-import { usePage } from "../../../pages/model/usePage.ts"
-import { Button } from "../../../shared/ui"
-import { highlightText } from "../../../shared/ui/highlightText.tsx"
+import type { Comment } from "@/entities/comment/model"
+import { PostId } from "@/entities/post/model"
+import { useComment } from "@/features/comment/model/useComment.ts"
+import { useDialog } from "@/features/dialog/model/useDialog.ts"
+import { usePage } from "@/pages/model/usePage.ts"
+import { Button } from "@/shared/ui"
+import { highlightText } from "@/shared/ui/highlightText.tsx"
 
 // features/comment/model/useComment.ts
 async function patchCommentAddLike(comment: Comment) {

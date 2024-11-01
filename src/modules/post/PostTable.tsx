@@ -1,5 +1,5 @@
-import { usePost } from "../../features/post/model/usePost.ts"
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../../shared/ui"
+import { usePost } from "@/features/post/model/usePost.ts"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui"
 import { PostTableItem } from "./PostTableItem.tsx"
 
 export function PostTable() {

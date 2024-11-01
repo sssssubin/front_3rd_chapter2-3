@@ -1,4 +1,4 @@
-import { useDialog } from "../../../features/dialog/model/useDialog"
+import { useDialog } from "../../../features/dialog/model/useDialog.ts"
 import { useUser } from "../../../features/user/model/useUser"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
 

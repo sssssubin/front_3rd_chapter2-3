@@ -1,5 +1,4 @@
-import { atom } from "jotai"
-import { useAtom } from "jotai/index"
+import { atom, useAtom } from "jotai"
 
 const showAddDialogAtom = atom(false)
 const showPostDetailDialogAtom = atom(false)

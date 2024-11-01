@@ -1,9 +1,9 @@
-import { usePost } from "../../features/post/model/usePost"
-import { usePostDialog } from "../../features/post/model/usePostDialog"
-import { usePage } from "../../pages/model/usePage"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import { highlightText } from "../../shared/ui/highlightText"
-import { CommentList } from "../comment/ui/CommentList"
+import { usePost } from "@/features/post/model/usePost.ts"
+import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
+import { usePage } from "@/pages/model/usePage.ts"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui"
+import { highlightText } from "@/shared/ui/highlightText.tsx"
+import { CommentList } from "@/modules/comment/ui/CommentList.tsx"
 
 export default function PostDetailDialog() {
   const { showPostDetailDialog, setShowPostDetailDialog } = usePostDialog()

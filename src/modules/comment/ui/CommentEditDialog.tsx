@@ -1,9 +1,8 @@
-import { updateCommentByPostId } from "../../../entities/comment/model"
-import { useComment } from "../../../features/comment/model/useComment"
-import { useDialog } from "../../../features/dialog/model/useDialog"
-import { Button, DialogHeader, Textarea } from "../../../shared/ui"
-import { putComment } from "../../../entities/comment/api"
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
+import { putComment } from "@/entities/comment/api"
+import { updateCommentByPostId } from "@/entities/comment/model"
+import { useComment } from "@/features/comment/model/useComment.ts"
+import { useDialog } from "@/features/dialog/model/useDialog.ts"
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Textarea } from "@/shared/ui"
 
 export function CommentEditDialog() {
   const { selectedComment, setSelectedComment } = useComment()

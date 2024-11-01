@@ -1,5 +1,5 @@
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
-import { usePage } from "../model/usePage"
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
+import { usePage } from "@/pages/model/usePage.ts"
 
 export function PostPagination() {
   const { limit, setLimit, skip, setSkip, total } = usePage()

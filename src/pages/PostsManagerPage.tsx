@@ -1,15 +1,3 @@
-import { Plus, Search } from "lucide-react"
-import { useEffect, useState } from "react"
-import { usePost } from "../features/post/model/usePost.ts"
-import { usePostDialog } from "../features/post/model/usePostDialog.ts"
-import { useTag } from "../features/tag/model/useTag.ts"
-import { CommentAddDialog } from "../modules/comment/ui/CommentAddDialog.tsx"
-import { CommentEditDialog } from "../modules/comment/ui/CommentEditDialog.tsx"
-import { PostAddDialog } from "../modules/post/PostAddDialog.tsx"
-import PostDetailDialog from "../modules/post/PostDetailDialog.tsx"
-import { PostEditDialog } from "../modules/post/PostEditDialog.tsx"
-import { PostTable } from "../modules/post/PostTable.tsx"
-import { UserDialog } from "../modules/user/ui/UserDialog.tsx"
 import {
   Button,
   Card,
@@ -22,7 +10,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../shared/ui"
+} from "@/shared/ui"
+import { Plus, Search } from "lucide-react"
+import { useEffect, useState } from "react"
+import { usePost } from "../features/post/model/usePost.ts"
+import { usePostDialog } from "../features/post/model/usePostDialog.ts"
+import { useTag } from "../features/tag/model/useTag.ts"
+import { CommentAddDialog } from "../modules/comment/ui/CommentAddDialog.tsx"
+import { CommentEditDialog } from "../modules/comment/ui/CommentEditDialog.tsx"
+import { PostAddDialog } from "../modules/post/PostAddDialog.tsx"
+import PostDetailDialog from "../modules/post/PostDetailDialog.tsx"
+import { PostEditDialog } from "../modules/post/PostEditDialog.tsx"
+import { PostTable } from "../modules/post/PostTable.tsx"
+import { UserDialog } from "../modules/user/ui/UserDialog.tsx"
 import { usePage } from "./model/usePage.ts"
 
 const PostsManager = () => {

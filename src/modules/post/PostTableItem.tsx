@@ -1,17 +1,17 @@
 // widgets/post/ui
-import { Post } from "../../entities/post/model/Post.ts"
-import { usePost } from "../../features/post/model/usePost.ts"
-import { useComment } from "../../features/comment/model/useComment.ts"
-import { usePostDialog } from "../../features/post/model/usePostDialog.ts"
-import { Button, TableCell, TableRow } from "../../shared/ui"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { User } from "../../entities/user/model/User.ts"
-import { highlightText } from "../../shared/ui/highlightText.tsx"
 import { Key } from "react"
+import { Post } from "@/entities/post/model"
+import { User } from "@/entities/user/model/User.ts"
+import { useComment } from "@/features/comment/model/useComment.ts"
+import { useDialog } from "@/features/dialog/model/useDialog.ts"
+import { usePost } from "@/features/post/model/usePost.ts"
+import { usePostDialog } from "@/features/post/model/usePostDialog.ts"
 import { TagBadge } from "../../features/tag/ui/TagBadge.tsx"
-import { usePage } from "../../pages/model/usePage.ts"
-import { useUser } from "../../features/user/model/useUser.ts"
-import { useDialog } from "../../features/dialog/model/useDialog.ts"
+import { useUser } from "@/features/user/model/useUser.ts"
+import { usePage } from "@/pages/model/usePage.ts"
+import { Button, TableCell, TableRow } from "@/shared/ui"
+import { highlightText } from "@/shared/ui/highlightText.tsx"
 
 // features/post/ui
 function PostOpenDetailButton({ post }: { post: Post }) {

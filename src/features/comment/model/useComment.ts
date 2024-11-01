@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai"
-import { PostId } from "../../../entities/post/model/Post"
-import { Comment, CommentInput, removeCommentByPostId, updateCommentByPostId } from "../../../entities/comment/model"
+import { Comment, CommentInput, removeCommentByPostId, updateCommentByPostId } from "@/entities/comment/model"
+import { PostId } from "@/entities/post/model"
 
 const commentsAtom = atom<Record<PostId, Comment[]>>({})
 const selectedCommentAtom = atom<Comment | null>(null)
