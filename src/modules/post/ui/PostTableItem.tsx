@@ -1,4 +1,3 @@
-// widgets/post/ui
 import { Post } from "@/entities/post/model"
 import { PostDeleteButton } from "@/features/post/ui/PostDeleteButton.tsx"
 import { PostOpenDetailButton } from "@/features/post/ui/PostOpenDetailButton.tsx"
