@@ -3,8 +3,8 @@ import { useTag } from "@/features/tag/model/useTag"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
 
 export function PostTagSelect() {
+  const { data: tags } = useQueryTags()
   const { selectedTag, setSelectedTag } = useTag()
-  const { tags } = useQueryTags()
 
   return (
     <Select value={selectedTag} onValueChange={setSelectedTag}>
@@ -13,7 +13,7 @@ export function PostTagSelect() {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">모든 태그</SelectItem>
-        {tags.map((tag) => (
+        {tags?.map((tag) => (
           <SelectItem key={tag.url} value={tag.slug}>
             {tag.slug}
           </SelectItem>

@@ -1,16 +1,12 @@
-import { Tag } from "@/entities/tag/model/Tag"
 import { atom, useAtom } from "jotai"
 
-const tagsAtom = atom<Tag[]>([])
 const selectedTagAtom = atom("")
 
+// @FIXME: useTag는 이제 Search목적으로 만 사용되고 있기에 Serach와 통합 필요
 export const useTag = () => {
-  const [tags, setTags] = useAtom(tagsAtom)
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom)
 
   return new (class {
-    tags = tags
-    setTags = setTags
     selectedTag = selectedTag
     setSelectedTag = setSelectedTag
   })()
