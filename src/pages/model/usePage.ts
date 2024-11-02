@@ -2,16 +2,16 @@ import { atom, useAtom } from "jotai"
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTag } from "@/features/tag/model/useTag.ts"
+import { SortBy, SortOrder } from "@/entities/post/api"
 
 const queryParams = new URLSearchParams(location.search)
 const skipAtom = atom(parseInt(queryParams.get("skip") || "0"))
 const limitAtom = atom(parseInt(queryParams.get("limit") || "10"))
 const searchQueryAtom = atom(queryParams.get("search") || "")
-const sortByAtom = atom(queryParams.get("sortBy") || "")
-const sortOrderAtom = atom(queryParams.get("sortOrder") || "asc")
+const sortByAtom = atom<SortBy | undefined>(queryParams.get("sortBy") as SortBy | undefined)
+const sortOrderAtom = atom<SortOrder | undefined>(queryParams.get("sortOrder") as SortOrder | undefined)
 
 // @FIXME: Route 라이브러리로 교체할거라서 일단 주석처리
-
 export const usePage = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -23,7 +23,7 @@ export const usePage = () => {
   const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [sortOrder, setSortOrder] = useAtom(sortOrderAtom)
 
-  const { selectedTag, setSelectedTag } = useTag()
+  const { selectedTag } = useTag()
 
   // URL 업데이트 함수
   useEffect(() => {

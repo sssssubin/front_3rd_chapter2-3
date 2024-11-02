@@ -1,5 +1,5 @@
 import { CommentAddForm } from "@/features/comment/ui/CommentAddForm"
-import { useDialog } from "@/features/dialog/model/useDialog.ts"
+import { useDialog } from "@/features/@dialog/model/useDialog.ts"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui"
 
 export function CommentAddDialog() {

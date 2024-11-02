@@ -84,3 +84,5 @@ export interface Crypto {
   wallet: string
   network: string
 }
+
+export type UserId = User["id"]

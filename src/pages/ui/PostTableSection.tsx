@@ -1,8 +1,11 @@
-import { useQueryPosts } from "@/features/post/api"
+import { useQueryPostTable } from "@/modules/post/api/useQueryPostTable"
+import { PostTable } from "@/modules/post/ui/PostTable"
 import { Loading } from "@/shared/ui"
-import { PostTable } from "../../modules/post/ui/PostTable"
 
 export const PostTableSection = () => {
-  const { loading, posts } = useQueryPosts()
-  return loading ? <Loading /> : <PostTable posts={posts} />
+  const { data, isLoading } = useQueryPostTable()
+
+  if (isLoading || !data) return <Loading />
+
+  return <PostTable posts={data.posts} />
 }

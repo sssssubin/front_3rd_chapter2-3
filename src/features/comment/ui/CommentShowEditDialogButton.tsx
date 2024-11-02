@@ -1,6 +1,6 @@
 import { type Comment } from "@/entities/comment/model"
 import { useComment } from "@/features/comment/model/useComment"
-import { useDialog } from "@/features/dialog/model/useDialog"
+import { useDialog } from "@/features/@dialog/model/useDialog"
 import { Button } from "@/shared/ui"
 import { Edit2 } from "lucide-react"
 

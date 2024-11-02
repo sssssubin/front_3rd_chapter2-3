@@ -5,7 +5,7 @@ import { CommentListItem } from "./CommentListItem"
 
 // ui/CommentList.tsx
 export function CommentList({ postId }: { postId: PostId }) {
-  const { commentsOfPost } = useQueryComments(postId)
+  const { data: commentsOfPost } = useQueryComments(postId)
 
   return (
     <div className="mt-2">
@@ -15,9 +15,7 @@ export function CommentList({ postId }: { postId: PostId }) {
       </div>
 
       <div className="space-y-1">
-        {commentsOfPost.map((comment) => (
-          <CommentListItem key={comment.id} comment={comment} />
-        ))}
+        {commentsOfPost?.comments?.map((comment) => <CommentListItem key={comment.id} comment={comment} />)}
       </div>
     </div>
   )

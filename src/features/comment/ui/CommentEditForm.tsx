@@ -1,6 +1,6 @@
 import { patchComment } from "@/entities/comment/api"
 import { useComment } from "@/features/comment/model/useComment.ts"
-import { useDialog } from "@/features/dialog/model/useDialog.ts"
+import { useDialog } from "@/features/@dialog/model/useDialog.ts"
 import { Button, Textarea } from "@/shared/ui"
 
 export function CommentEditForm() {

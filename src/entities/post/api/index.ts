@@ -1,21 +1,37 @@
 import ky from "ky"
 import type { Post, PostInput } from "../model"
 
+export type SortBy = keyof Post
+export type SortOrder = "asc" | "desc"
+
+export interface PaginationParams {
+  limit?: number
+  skip?: number
+  sortBy?: SortBy
+  sortOrder?: SortOrder
+}
+
 interface PostsResponse {
   posts: Post[]
   total: number
 }
 
-export async function fetchPosts(limit: number, skip: number): Promise<PostsResponse> {
-  return ky.get(`/api/posts`, { searchParams: { limit, skip } }).json()
+const makeSearchParams = (params?: PaginationParams) => {
+  if (!params) return {}
+  return Object.fromEntries(Object.entries(params).filter(([_, value]) => value !== undefined))
 }
 
-export async function fetchPostsByTag(tag: string): Promise<PostsResponse> {
-  return ky.get(`/api/posts/tag/${tag}`).json()
+//
+export async function fetchPosts(params?: PaginationParams): Promise<PostsResponse> {
+  return ky.get(`/api/posts`, { searchParams: makeSearchParams(params) }).json()
 }
 
-export async function fetchPostsSearch(query: string): Promise<PostsResponse> {
-  return ky.get(`/api/posts/search`, { searchParams: { q: query } }).json()
+export async function fetchPostsByTag(tag: string, params?: PaginationParams): Promise<PostsResponse> {
+  return ky.get(`/api/posts/tag/${tag}`, { searchParams: makeSearchParams(params) }).json()
+}
+
+export async function fetchPostsSearch(query: string, params?: PaginationParams): Promise<PostsResponse> {
+  return ky.get(`/api/posts/search`, { searchParams: { q: query, ...makeSearchParams(params) } }).json()
 }
 
 export async function addPost(post: PostInput): Promise<Post> {

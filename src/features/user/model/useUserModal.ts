@@ -1,4 +1,3 @@
-import { fetchUser } from "@/entities/user/api"
 import type { User } from "@/entities/user/model/User.ts"
 import { atom, useAtom } from "jotai"
 
@@ -10,13 +9,8 @@ export function useUserModal() {
   const [showUserModal, setShowUserModal] = useAtom(showUserModalAtom)
 
   async function openUserModal(user: User) {
-    try {
-      const userData = await fetchUser(user.id)
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
+    setSelectedUser(user)
+    setShowUserModal(true)
   }
 
   return new (class {

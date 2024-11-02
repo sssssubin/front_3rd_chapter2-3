@@ -1,10 +1,11 @@
-import { usePost } from "@/features/post/model/usePost"
+import { useQueryPostTable } from "@/modules/post/api/useQueryPostTable"
 import { usePage } from "@/pages/model/usePage.ts"
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
 
 export function PostPagination() {
   const { limit, setLimit, skip, setSkip } = usePage()
-  const { total } = usePost()
+  const { data } = useQueryPostTable()
+  const total = data?.total || 0
 
   return (
     <div className="flex justify-between items-center">

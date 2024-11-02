@@ -1,6 +1,6 @@
 import { PostId } from "@/entities/post/model"
 import { useComment } from "@/features/comment/model/useComment"
-import { useDialog } from "@/features/dialog/model/useDialog"
+import { useDialog } from "@/features/@dialog/model/useDialog"
 import { Button } from "@/shared/ui"
 import { Plus } from "lucide-react"
 
