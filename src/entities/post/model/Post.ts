@@ -1,3 +1,5 @@
+import { User } from "@/entities/user/model/User"
+
 export interface PostList {
   posts: Post[]
   total: number
@@ -13,6 +15,9 @@ export interface Post {
   reactions: Reactions
   views: number
   userId: number
+
+  // extends
+  author: User
 }
 
 export type PostId = Post["id"]

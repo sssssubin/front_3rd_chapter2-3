@@ -1,22 +1,12 @@
 // features/user/ui
-import { fetchUser } from "@/entities/user/api"
 import type { User } from "@/entities/user/model/User.ts"
-import { useDialog } from "@/features/dialog/model/useDialog.ts"
-import { useUser } from "@/features/user/model/useUser.ts"
+import { useUserModal } from "@/features/user/model/useUserModal.ts"
 
 export function UserOpenDialogButton({ user }: { user: User }) {
-  const { setSelectedUser } = useUser()
-  const { setShowUserModal } = useDialog()
+  const { openUserModal } = useUserModal()
 
-  // 사용자 모달 열기
   async function handleUserModalOpen(user: User) {
-    try {
-      const userData = await fetchUser(user.id)
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
+    openUserModal(user)
   }
 
   return (

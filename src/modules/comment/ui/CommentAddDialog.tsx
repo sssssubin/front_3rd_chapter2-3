@@ -11,7 +11,6 @@ export function CommentAddDialog() {
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>
         </DialogHeader>
-
         <CommentAddForm />
       </DialogContent>
     </Dialog>

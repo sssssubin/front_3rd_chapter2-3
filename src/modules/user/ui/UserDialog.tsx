@@ -1,10 +1,8 @@
-import { useDialog } from "../../../features/dialog/model/useDialog.ts"
-import { useUser } from "../../../features/user/model/useUser"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../shared/ui"
+import { useUserModal } from "@/features/user/model/useUserModal.ts"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui"
 
 export function UserDialog() {
-  const { showUserModal, setShowUserModal } = useDialog()
-  const { selectedUser } = useUser()
+  const { showUserModal, setShowUserModal, selectedUser } = useUserModal()
 
   if (!selectedUser) return null
   return (
