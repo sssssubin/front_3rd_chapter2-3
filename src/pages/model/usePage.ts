@@ -8,8 +8,8 @@ const queryParams = new URLSearchParams(location.search)
 const skipAtom = atom(parseInt(queryParams.get("skip") || "0"))
 const limitAtom = atom(parseInt(queryParams.get("limit") || "10"))
 const searchQueryAtom = atom(queryParams.get("search") || "")
-const sortByAtom = atom<SortBy | undefined>(queryParams.get("sortBy") as SortBy | undefined)
-const sortOrderAtom = atom<SortOrder | undefined>(queryParams.get("sortOrder") as SortOrder | undefined)
+const sortByAtom = atom<SortBy>((queryParams.get("sortBy") || "id") as SortBy)
+const sortOrderAtom = atom<SortOrder>((queryParams.get("sortOrder") || "desc") as SortOrder)
 
 // @FIXME: Route 라이브러리로 교체할거라서 일단 주석처리
 export const usePage = () => {

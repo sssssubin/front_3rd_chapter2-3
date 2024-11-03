@@ -1,6 +1,7 @@
+import { CommentInput } from "@/entities/comment/model"
 import { atom, useAtom } from "jotai"
 
-const showAddCommentDialogAtom = atom(false)
+const showAddCommentDialogAtom = atom<Partial<CommentInput> | null>(null)
 const showEditCommentDialogAtom = atom(false)
 
 export const useDialog = () => {

@@ -1,11 +1,16 @@
+import { SortBy } from "@/entities/post/api"
 import { usePage } from "@/pages/model/usePage.ts"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui"
 
 export function PostSortBySelect() {
   const { sortBy, setSortBy } = usePage()
 
+  function handleSortByChange(value: SortBy) {
+    setSortBy(value)
+  }
+
   return (
-    <Select value={sortBy} onValueChange={setSortBy}>
+    <Select value={sortBy} onValueChange={handleSortByChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="정렬 기준" />
       </SelectTrigger>

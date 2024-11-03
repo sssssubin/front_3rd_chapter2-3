@@ -2,7 +2,6 @@ import {
   addCommentToPost,
   Comment,
   CommentId,
-  CommentInput,
   CommentList,
   patchCommentByPostId,
   removeCommentByPostId,
@@ -12,12 +11,10 @@ import { atom, useAtom } from "jotai"
 
 const commentsAtom = atom<CommentList>({})
 const selectedCommentAtom = atom<Comment | null>(null)
-const newCommentAtom = atom<CommentInput>({ body: "", postId: null, userId: 1 })
 
 export const useComment = () => {
   const [comments, setComments] = useAtom(commentsAtom)
   const [selectedComment, setSelectedComment] = useAtom(selectedCommentAtom)
-  const [newComment, setNewComment] = useAtom(newCommentAtom)
 
   return new (class {
     comments = comments
@@ -40,8 +37,5 @@ export const useComment = () => {
 
     selectedComment = selectedComment
     setSelectedComment = setSelectedComment
-
-    newComment = newComment
-    setNewComment = setNewComment
   })()
 }

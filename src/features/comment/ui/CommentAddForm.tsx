@@ -1,11 +1,15 @@
-import { addComment } from "@/entities/comment/api"
-import { useComment } from "@/features/comment/model/useComment.ts"
+import { CommentInput } from "@/entities/comment/model"
 import { useDialog } from "@/features/@dialog/model/useDialog.ts"
 import { Button, Textarea } from "@/shared/ui"
+import { useState } from "react"
+import { useMutationCommentAdd } from "../api/useMutationCommentAdd"
 
 export function CommentAddForm() {
-  const { addCommentToPost } = useComment()
-  const { newComment, setNewComment } = useComment()
+  const { showAddCommentDialog } = useDialog()
+  const postId = showAddCommentDialog?.postId
+  const [newComment, setNewComment] = useState<CommentInput>({ body: "", postId, userId: 1 })
+
+  const { mutate: addComment } = useMutationCommentAdd()
   const { setShowAddCommentDialog } = useDialog()
 
   function handleBodyChange(body: string) {
@@ -13,14 +17,9 @@ export function CommentAddForm() {
   }
 
   async function handleCommentAdd() {
-    try {
-      const data = await addComment(newComment)
-      addCommentToPost(data.postId, data)
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
+    addComment(newComment)
+    setShowAddCommentDialog(null)
+    setNewComment({ body: "", postId: null, userId: 1 })
   }
 
   return (

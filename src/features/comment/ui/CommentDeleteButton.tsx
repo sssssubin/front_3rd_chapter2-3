@@ -1,19 +1,13 @@
-import { deleteComment } from "@/entities/comment/api"
 import { type Comment } from "@/entities/comment/model"
-import { useComment } from "@/features/comment/model/useComment"
 import { Button } from "@/shared/ui"
 import { Trash2 } from "lucide-react"
+import { useMutationCommentDelete } from "../api/useMutationCommentDelete"
 
 export function CommentDeleteButton({ comment }: { comment: Comment }) {
-  const { removeCommentByPostId } = useComment()
+  const { mutate: deleteComment } = useMutationCommentDelete()
 
   async function handleCommentDelete() {
-    try {
-      await deleteComment(comment.id)
-      removeCommentByPostId(comment.postId, comment.id)
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
+    deleteComment(comment)
   }
 
   return (

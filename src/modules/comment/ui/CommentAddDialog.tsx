@@ -4,9 +4,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui"
 
 export function CommentAddDialog() {
   const { showAddCommentDialog, setShowAddCommentDialog } = useDialog()
+  const isOpen = showAddCommentDialog !== null
+
+  function handleClose() {
+    setShowAddCommentDialog(null)
+  }
 
   return (
-    <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>

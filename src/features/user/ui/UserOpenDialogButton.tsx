@@ -6,7 +6,7 @@ export function UserOpenDialogButton({ user }: { user: User }) {
   const { openUserModal } = useUserModal()
 
   async function handleUserModalOpen(user: User) {
-    openUserModal(user)
+    await openUserModal(user)
   }
 
   return (
