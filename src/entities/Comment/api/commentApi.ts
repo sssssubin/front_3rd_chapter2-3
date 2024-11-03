@@ -1,15 +1,15 @@
-import { Comment } from "../model/types"
+import { AddComment, Comment } from "../model/types"
 
 export const commentApi = {
   // 댓글 목록 조회
-  getComments: async (postId: string | number): Promise<Comment[]> => {
+  getComments: async (postId: number): Promise<Comment[]> => {
     const response = await fetch(`/api/comments/post/${postId}`)
     const data = await response.json()
     return data.comments
   },
 
   // 댓글 생성
-  createComment: async (comment: { body: string; postId: number | string; userId: number }): Promise<Comment> => {
+  createComment: async (comment: AddComment): Promise<Comment> => {
     const response = await fetch("/api/comments/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

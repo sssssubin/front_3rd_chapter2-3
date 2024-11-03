@@ -7,3 +7,5 @@ export interface Comment {
   }
   likes: number
 }
+
+export type AddComment = Pick<Comment, "body" | "postId"> & { userId: number }

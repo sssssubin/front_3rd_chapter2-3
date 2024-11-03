@@ -3,7 +3,7 @@ import { Comment } from "../../../entities/Comment/model/types"
 import { commentApi } from "../../../entities/Comment/api/commentApi"
 
 // 댓글 목록 조회 훅
-export const useGetComments = (postId: string | number) => {
+export const useGetComments = (postId: number) => {
   return useQuery({
     queryKey: ["comments", postId],
     queryFn: () => commentApi.getComments(postId),
